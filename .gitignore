@@ -23,6 +23,7 @@
 hs_err_pid*
 
 # Compiled files.
+target/**
 */target/**
 
 ### JetBrains ###
