@@ -35,7 +35,7 @@ public class GetRequestTest {
 
     Object output = requestHandler.handleRequest("Test ID", ctx);
 
-    // TODO: validate output here if needed.
+    // TODO: validate output here.
     if (output != null) {
       System.out.println(output.toString());
     }
