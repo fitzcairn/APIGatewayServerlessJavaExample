@@ -2,9 +2,9 @@ package com.stevezero.aws.goaltender;
 
 public enum StatusCode {
   OK(200, "Ok"),
-  SERVER_ERROR(400, "Unknown Server Error"),
   NOT_FOUND(404, "Not found"),
-  NOT_ALLOWED(405, "Method not allowed.");
+  NOT_ALLOWED(405, "Method not allowed."),
+  SERVER_ERROR(500, "Unknown Server Error");
 
   private final int code;
   private final String description;

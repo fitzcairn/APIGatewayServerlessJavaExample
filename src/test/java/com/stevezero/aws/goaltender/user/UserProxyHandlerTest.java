@@ -16,6 +16,9 @@ import static org.junit.Assert.assertEquals;
  * Tests for the GetRequest class.
  */
 public class UserProxyHandlerTest {
+  // {"t": "g","i": "1234"}
+  private final String testIdString = "eyJ0IjogImciLCJpIjogIjEyMzQifQ==";
+
   @BeforeClass
   public static void setup() throws IOException {
   }
@@ -34,14 +37,14 @@ public class UserProxyHandlerTest {
 
     // Create a fake request.
     ApiGatewayProxyRequest request = new ApiGatewayProxyRequest()
-        .setPath("/user/1234")
+        .setPath("user/" + testIdString)
         .setHttpMethod("GET")
         .setBase64Encoded(false);
 
     ApiGatewayProxyResponse output = requestHandler.handleRequest(request, context);
 
     if (output != null) {
-      assertEquals(output.getStatusCode(), StatusCode.OK.getCode());
+      assertEquals(StatusCode.OK.getCode(), output.getStatusCode());
 
       System.out.println(output.toString());
     }

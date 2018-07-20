@@ -17,7 +17,9 @@ public class GetUser {
 
     try {
       logger.log("Handling request in GetUser.");
+
       // TODO: actual logic. :)
+
       responseBuilder
           .withBody(id.toString())
           .withStatusCode(StatusCode.OK);
