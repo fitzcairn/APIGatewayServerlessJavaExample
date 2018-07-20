@@ -1,4 +1,4 @@
-package com.stevezero.aws.goaltender.lambda;
+package com.stevezero.aws.goaltender;
 
 import com.amazonaws.services.lambda.runtime.ClientContext;
 import com.amazonaws.services.lambda.runtime.CognitoIdentity;

@@ -22,7 +22,19 @@
         // The ID token you need to pass to your backend:
         var id_token = googleUser.getAuthResponse().id_token;
         console.log("ID Token: " + id_token);
+
+        document.getElementById("token").value = id_token;
       };
+
+      function copyToken() {
+          var copyText = document.getElementById("token");
+          copyText.select();
+          document.execCommand("copy");
+       }
     </script>
+    <br>Token:<br>
+    <input type="text" value="Sign in to get token." id="token">
+    <button onclick="copyToken()">Copy To Clipboard</button>
 </body>
+
 </html>
