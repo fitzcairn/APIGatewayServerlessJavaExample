@@ -1,16 +1,17 @@
-package com.stevezero.aws.goaltender.user;
+package com.stevezero.aws.goaltender.api.user;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.stevezero.aws.goaltender.ApiGatewayProxyRequest;
-import com.stevezero.aws.goaltender.ApiGatewayProxyResponse;
-import com.stevezero.aws.goaltender.StatusCode;
-import com.stevezero.aws.goaltender.user.data.UserId;
-import com.stevezero.aws.goaltender.user.methods.GetUser;
+import com.stevezero.aws.goaltender.api.ApiGatewayProxyRequest;
+import com.stevezero.aws.goaltender.api.ApiGatewayProxyResponse;
+import com.stevezero.aws.goaltender.api.user.data.UserId;
+import com.stevezero.aws.goaltender.api.user.methods.GetUser;
+import com.stevezero.aws.goaltender.exceptions.GoalTenderAPIException;
+import com.stevezero.aws.goaltender.exceptions.InvalidAPIMethod;
+import com.stevezero.aws.goaltender.http.Method;
+import com.stevezero.aws.goaltender.http.StatusCode;
 import org.json.simple.parser.JSONParser;
-
-import java.io.IOException;
 
 /**
  * Entry point for handling methods for the User API.
@@ -21,6 +22,7 @@ public class UserProxyHandler implements RequestHandler<ApiGatewayProxyRequest, 
   public ApiGatewayProxyResponse handleRequest(ApiGatewayProxyRequest request, Context context) {
     ApiGatewayProxyResponse.Builder responseBuilder = new ApiGatewayProxyResponse.Builder();
     LambdaLogger logger = context.getLogger();
+
     logger.log("Loading Java Lambda handler of UserProxyHandler");
     logger.log(request.toString());
 
@@ -28,27 +30,27 @@ public class UserProxyHandler implements RequestHandler<ApiGatewayProxyRequest, 
       // Pull out the ID.
       UserId id = UserId.fromPathString(request.getPath());
 
-      logger.log(request.getHttpMethod());
-
       // Hand off to the correct handler, based on method.
-      // TODO: yuck, let's do something smarter here?
-      if (request.getHttpMethod().equals("GET")) {
-        return new GetUser().handle(id, context);
+      switch(Method.valueOf(request.getHttpMethod())) {
+        case GET:
+          return new GetUser().handle(id, context);
+        case PUT:
+          // TODO: implement
+        case POST:
+          // TODO: implement
+        default:
+          // No handler for method.
+          throw new InvalidAPIMethod(request.getHttpMethod());
       }
-      // No handler for method.
+    } catch(GoalTenderAPIException e) {
       return responseBuilder
-          .withStatusCode(StatusCode.NOT_ALLOWED)
-          .build();
-
-    } catch(IOException e) { // ID parse failed.
-      return responseBuilder
-          .withStatusCode(StatusCode.NOT_FOUND)
+          .withStatusCode(e.getReturnCode())
           .withBody(e.toString())
           .build();
-    } catch(Exception e) {  // Something else went wrong.
+    } catch(RuntimeException e) {  // Catch-all: something else went wrong.
+      logger.log("Error: " + e.toString());
       return responseBuilder
           .withStatusCode(StatusCode.SERVER_ERROR)
-          .withBody(e.toString())
           .build();
     }
   }

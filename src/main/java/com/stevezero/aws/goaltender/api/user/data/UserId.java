@@ -1,10 +1,11 @@
-package com.stevezero.aws.goaltender.user.data;
+package com.stevezero.aws.goaltender.api.user.data;
 
+import com.stevezero.aws.goaltender.exceptions.InvalidAPIResource;
+import com.stevezero.aws.goaltender.exceptions.InvalidUserIdException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.IOException;
 import java.util.Base64;
 
 /**
@@ -46,7 +47,7 @@ public class UserId {
           return type;
         }
       }
-      throw new IllegalArgumentException("Identity type not found for " + inputString);
+      throw new IllegalArgumentException();
     }
   }
 
@@ -73,14 +74,15 @@ public class UserId {
     this.id = id;
   }
 
-  public static UserId fromPathString(String idPathString) throws IllegalArgumentException {
+  public static UserId fromPathString(String idPathString) throws InvalidAPIResource, InvalidUserIdException {
+    // Expect: /user/ID
     String[] components = idPathString.split("/");
 
     // Make sure we have expected input.
-    if (components.length != 2 || !PATH_KEY.equals(components[0]))
-      throw new IllegalArgumentException("Invalid API call.");
+    if (components.length != 3 || !PATH_KEY.equals(components[1]))
+      throw new InvalidAPIResource("Invalid API call.");
 
-    return fromIdString(components[1]);
+    return fromIdString(components[2]);
   }
 
   /* base64IdString is a URL-safe base64 encoded version of:
@@ -89,12 +91,11 @@ public class UserId {
         id: "1234", // Token
       }
    */
-  public static UserId fromIdString(String base64IdString) throws IllegalArgumentException {
-    // Decode the string, propagating the exception if something went wrong.
-    String jsonIdString = new String(DECODER.decode(base64IdString));
-
+  public static UserId fromIdString(String base64IdString) throws InvalidUserIdException {
     // Parse the JSON.
     try {
+      // Decode the string, propagating the exception if something went wrong.
+      String jsonIdString = new String(DECODER.decode(base64IdString));
       JSONObject userIdJson = (JSONObject) JSON_PARSER.parse(jsonIdString);
 
       // TODO: identity validation, if we're to do something more than store data against this ID.
@@ -102,9 +103,8 @@ public class UserId {
           IdentityType.fromString((String)userIdJson.get(TYPE_KEY)),
           (String)userIdJson.get(ID_KEY));
 
-    } catch (ParseException e) {
-      // Propogate error upwards.
-      throw new IllegalArgumentException(e);
+    } catch (ParseException | IllegalArgumentException e) {
+      throw new InvalidUserIdException(base64IdString);
     }
   }
 }

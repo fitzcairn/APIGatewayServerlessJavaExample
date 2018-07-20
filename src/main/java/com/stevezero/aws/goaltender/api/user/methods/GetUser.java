@@ -1,17 +1,17 @@
-package com.stevezero.aws.goaltender.user.methods;
+package com.stevezero.aws.goaltender.api.user.methods;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import com.stevezero.aws.goaltender.ApiGatewayProxyResponse;
-import com.stevezero.aws.goaltender.StatusCode;
-import com.stevezero.aws.goaltender.user.data.UserId;
+import com.stevezero.aws.goaltender.api.ApiGatewayProxyResponse;
+import com.stevezero.aws.goaltender.http.StatusCode;
+import com.stevezero.aws.goaltender.api.user.data.UserId;
 
 /**
  * Look up user and return information, or not found.
  */
 public class GetUser {
 
-  public ApiGatewayProxyResponse handle(UserId id, Context context) throws Exception {
+  public ApiGatewayProxyResponse handle(UserId id, Context context) {
     ApiGatewayProxyResponse.Builder responseBuilder = new ApiGatewayProxyResponse.Builder();
     LambdaLogger logger = context.getLogger();
 

@@ -1,4 +1,4 @@
-package com.stevezero.aws.goaltender;
+package com.stevezero.aws.goaltender.http;
 
 public enum StatusCode {
   OK(200, "Ok"),

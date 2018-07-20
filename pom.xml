@@ -39,7 +39,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.stevezero.aws.goaltender.user.UserProxyHandler</mainClass>
+                            <mainClass>com.stevezero.aws.goaltender.api.user.UserProxyHandler</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

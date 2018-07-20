@@ -1,4 +1,4 @@
-package com.stevezero.aws.goaltender.user.data;
+package com.stevezero.aws.goaltender.api.user.data;
 
 /**
  * Simple pojo representing a user.
