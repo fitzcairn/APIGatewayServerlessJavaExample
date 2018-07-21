@@ -1,6 +1,6 @@
-package com.stevezero.aws.goaltender.api;
+package com.stevezero.aws.api;
 
-import com.stevezero.aws.goaltender.api.http.StatusCode;
+import com.stevezero.aws.api.http.StatusCode;
 import org.json.simple.JSONObject;
 
 import java.util.HashMap;

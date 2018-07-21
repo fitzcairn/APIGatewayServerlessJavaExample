@@ -1,7 +1,7 @@
-package com.stevezero.aws.api.goaltender.storage.service;
+package com.stevezero.aws.api.storage.service;
 
 import com.stevezero.aws.api.id.ResourceId;
-import com.stevezero.aws.api.goaltender.storage.items.MappedItem;
+import com.stevezero.aws.api.storage.items.MappedItem;
 
 /**
  * Interface for a service interacting with backend storage.

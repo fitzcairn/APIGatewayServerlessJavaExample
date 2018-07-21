@@ -1,13 +1,14 @@
-package com.stevezero.aws.api.goaltender.storage.items.impl;
+package com.stevezero.aws.api.apps.goaltender.storage.items.impl;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.stevezero.aws.api.goaltender.id.impl.UserId;
+import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
+import com.stevezero.aws.api.apps.goaltender.id.impl.UserId;
 import com.stevezero.aws.api.storage.items.MappedItem;
 import org.joda.time.DateTime;
 
 /**
- * Mapped POJO for a Dynamo User item.
+ * Mapped POJO for a Dynamo UserResource item.
  */
 @DynamoDBTable(tableName="goaltender-user")
 public class UserItem implements MappedItem {
@@ -65,7 +66,7 @@ public class UserItem implements MappedItem {
   }
 
 
-  // Unmapped utility getters, with lazy init.
+  // Unmapped utility getters, with lazy createHandlers.
   public DateTime getReminderTime() {
     if (reminderTime == null)
       this.reminderTime = new DateTime(reminderTimeString);
@@ -79,7 +80,7 @@ public class UserItem implements MappedItem {
   }
 
   // Note: we can safely depend that the key is defined, as it's the primary key in Dynamo.
-  public UserId getUserId() {
+  public UserId getUserId() throws InvalidResourceIdException {
     if (userId == null)
       this.userId = UserId.fromEncoded(this.key);
     return userId;

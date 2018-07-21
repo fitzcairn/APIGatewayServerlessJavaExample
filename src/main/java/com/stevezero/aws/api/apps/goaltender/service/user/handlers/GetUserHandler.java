@@ -1,52 +1,53 @@
-package com.stevezero.aws.api.goaltender.service.user.handlers;
+package com.stevezero.aws.api.apps.goaltender.service.user.handlers;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.stevezero.aws.api.ApiGatewayProxyRequest;
 import com.stevezero.aws.api.ApiGatewayProxyResponse;
-import com.stevezero.aws.api.goaltender.common.ResourceType;
-import com.stevezero.aws.api.goaltender.service.ApiMethodHandler;
-import com.stevezero.aws.api.goaltender.service.user.User;
-import com.stevezero.aws.api.goaltender.storage.items.impl.UserItem;
-import com.stevezero.aws.api.storage.service.StorageService;
-import com.stevezero.aws.api.goaltender.storage.service.impl.UserStorageService;
+import com.stevezero.aws.api.apps.goaltender.id.IdExtractor;
+import com.stevezero.aws.api.exceptions.ApiException;
+import com.stevezero.aws.api.service.ApiMethodHandler;
+import com.stevezero.aws.api.apps.goaltender.service.resource.ResourceType;
+import com.stevezero.aws.api.apps.goaltender.service.resource.impl.UserResource;
+import com.stevezero.aws.api.apps.goaltender.storage.items.impl.UserItem;
+import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
 import com.stevezero.aws.api.http.StatusCode;
 import com.stevezero.aws.api.id.ResourceId;
+import com.stevezero.aws.api.storage.service.StorageService;
 
 /**
+ * Handler for GET /user/{ID}
  * Look up user and return information, or not found.
  */
-public class GetUserHandler extends ApiMethodHandler {
+public class GetUserHandler implements ApiMethodHandler {
 
 
   @Override
-  public ApiGatewayProxyResponse handle(ApiGatewayProxyRequest request,
-                                        Context context,
-                                        StorageService storageService) {
+  public ApiGatewayProxyResponse handleRequest(ApiGatewayProxyRequest request,
+                                               Context context,
+                                               StorageService storageService) throws ApiException {
     ApiGatewayProxyResponse.Builder responseBuilder = new ApiGatewayProxyResponse.Builder();
     LambdaLogger logger = context.getLogger();
 
-    try {
-      logger.log("Executing GetUserHandler");
 
-      // Pull out the ID.
-      ResourceId id = extractIdFromPath(request.getPath(), ResourceType.USER);
+    logger.log("Executing GetUserHandler");
 
-      UserStorageService userStorageService = (UserStorageService) storageService;
-      User user = User.fromUserItem((UserItem)userStorageService.get(id));
+    // Pull out the ID.
+    ResourceId id = IdExtractor.extractIdFromPath(request.getPath(), ResourceType.USER);
 
-      if (user == null) {
-        responseBuilder
-            .withStatusCode(StatusCode.NOT_FOUND);
-      } else {
-        responseBuilder
-            .withBody(user.toJsonString())
-            .withStatusCode(StatusCode.OK);
-      }
-    } catch(Exception e) {
+    // Attempt to fetch from storage.
+    UserItem userItem = (UserItem)(storageService.get(id));
+
+    if (userItem == null) {
       responseBuilder
-          .withStatusCode(StatusCode.SERVER_ERROR)
-          .withBody(e.toString());
+          .withStatusCode(StatusCode.NOT_FOUND);
+    } else {
+      // Re-encode into an API resource.
+      UserResource userResource = UserResource.fromUserItem(userItem);
+
+      responseBuilder
+          .withBody(userResource.toJsonString())
+          .withStatusCode(StatusCode.OK);
     }
 
     return responseBuilder.build();

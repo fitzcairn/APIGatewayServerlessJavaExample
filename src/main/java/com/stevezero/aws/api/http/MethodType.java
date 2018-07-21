@@ -1,9 +1,9 @@
-package com.stevezero.aws.goaltender.api.http;
+package com.stevezero.aws.api.http;
 
 /**
- * HTTP methods supported in the GoalTender API.
+ * HTTP handlers supported in the GoalTender API.
  */
-public enum Method {
+public enum MethodType {
   GET,
   POST,
   PUT,

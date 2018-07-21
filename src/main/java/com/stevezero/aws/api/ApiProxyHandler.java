@@ -1,22 +1,22 @@
-package com.stevezero.aws.goaltender.service;
+package com.stevezero.aws.api;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.stevezero.aws.api.ApiGatewayProxyRequest;
-import com.stevezero.aws.api.ApiGatewayProxyResponse;
+import com.stevezero.aws.api.service.ApiMethodHandler;
 import com.stevezero.aws.api.http.MethodType;
 import com.stevezero.aws.api.http.StatusCode;
-import com.stevezero.aws.goaltender.common.ResourceType;
-import com.stevezero.aws.api.exceptions.APIException;
-import com.stevezero.aws.api.exceptions.impl.InvalidAPIMethod;
-import com.stevezero.aws.goaltender.storage.service.StorageService;
+import com.stevezero.aws.api.apps.goaltender.service.resource.ResourceType;
+import com.stevezero.aws.api.exceptions.ApiException;
+import com.stevezero.aws.api.exceptions.InvalidApiMethod;
+import com.stevezero.aws.api.storage.service.StorageService;
 
 import java.util.EnumMap;
 import java.util.Map;
 
 /**
- * Centralize logic common across all APIs.
+ * Generic AWS API Gatreway proxy API handler for lambdas.  Subclass this and add method-specific handlers to implement
+ * a proxy API.
  */
 public abstract class ApiProxyHandler implements RequestHandler<ApiGatewayProxyRequest, ApiGatewayProxyResponse> {
   protected final StorageService storageService;
@@ -26,13 +26,13 @@ public abstract class ApiProxyHandler implements RequestHandler<ApiGatewayProxyR
   protected ApiProxyHandler(StorageService storageService, ResourceType resourceType) {
     this.storageService = storageService;
     this.resourceType = resourceType;
-    this.init();
+    this.createHandlers();
   }
 
   /**
-   * Set up API-specific handlers.
+   * Assign specific handlers for HTTP methods.
    */
-  protected abstract void init();
+  protected abstract void createHandlers();
 
   /**
    * Handle the request for a proxy API.
@@ -44,18 +44,18 @@ public abstract class ApiProxyHandler implements RequestHandler<ApiGatewayProxyR
     ApiGatewayProxyResponse.Builder responseBuilder = new ApiGatewayProxyResponse.Builder();
     LambdaLogger logger = context.getLogger();
 
-    logger.log("Loading Java Lambda handler of UserProxyHandler");
+    // TODO: remove.
     logger.log(request.toString());
 
     try {
       // Do we have this method implemented on this resource?
       ApiMethodHandler handler = methodHandlers.get(MethodType.valueOf(request.getHttpMethod()));
       if (handler == null)
-        throw new InvalidAPIMethod(request.getHttpMethod());
+        throw new InvalidApiMethod(request.getHttpMethod());
 
       // Invoke the method handler
-      return methodHandlers.get(resourceType).handle(request, context, storageService);
-    } catch(APIException e) { // Catch API exceptions.
+      return methodHandlers.get(resourceType).handleRequest(request, context, storageService);
+    } catch(ApiException e) { // Catch API exceptions.
       return responseBuilder
           .withStatusCode(e.getReturnCode())
           .withBody(e.toString())

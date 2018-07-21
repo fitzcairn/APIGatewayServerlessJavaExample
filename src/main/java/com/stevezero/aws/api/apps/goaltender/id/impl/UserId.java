@@ -1,7 +1,7 @@
-package com.stevezero.aws.api.goaltender.id.impl;
+package com.stevezero.aws.api.apps.goaltender.id.impl;
 
-import com.stevezero.aws.api.exceptions.impl.InvalidUserIdException;
-import com.stevezero.aws.api.goaltender.common.IdentityType;
+import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
+import com.stevezero.aws.api.id.IdentityType;
 import com.stevezero.aws.api.id.ResourceId;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -51,7 +51,7 @@ public class UserId implements ResourceId {
         i: "1234", // Token
       }
    */
-  public static UserId fromEncoded(String base64IdString) throws InvalidUserIdException {
+  public static UserId fromEncoded(String base64IdString) throws InvalidResourceIdException {
     try {
       // Decode the string, propagating the exception if something went wrong.
       String jsonIdString = new String(DECODER.decode(base64IdString));
@@ -64,7 +64,7 @@ public class UserId implements ResourceId {
           IdentityType.decode((String)userIdJson.get(TYPE_KEY)));
 
     } catch (ParseException | IllegalArgumentException e) {
-      throw new InvalidUserIdException(base64IdString);
+      throw new InvalidResourceIdException(base64IdString);
     }
   }
 }

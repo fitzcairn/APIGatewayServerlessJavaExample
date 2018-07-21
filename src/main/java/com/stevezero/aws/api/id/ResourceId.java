@@ -1,7 +1,7 @@
-package com.stevezero.aws.goaltender.common.id;
+package com.stevezero.aws.api.id;
 
 /**
- * Describes a Resource ID in the API and also in Dynamo DB.  For example, a User ID.
+ * Describes a Resource ID in the API and also in Dynamo DB.  For example, a UserResource ID.
  */
 public interface ResourceId {
 

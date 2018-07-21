@@ -1,4 +1,4 @@
-package com.stevezero.aws.api.service.impl;
+package com.stevezero.aws.api.apps.goaltender.storage.service.impl;
 
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;

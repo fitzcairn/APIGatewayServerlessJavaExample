@@ -1,4 +1,4 @@
-package com.stevezero.aws.api.goaltender.storage.items;
+package com.stevezero.aws.api.storage.items;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 

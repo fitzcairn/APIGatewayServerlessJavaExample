@@ -1,4 +1,4 @@
-package com.stevezero.aws.api.goaltender.common;
+package com.stevezero.aws.api.id;
 
 /**
  * Supported identity providers.

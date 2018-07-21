@@ -1,11 +1,11 @@
-package com.stevezero.aws.api.apps.goaltender.service.user;
+package com.stevezero.aws.api.apps.goaltender.service.resource.impl;
 
 import com.stevezero.aws.api.apps.goaltender.id.impl.UserId;
-import com.stevezero.aws.api.apps.goaltender.service.ResourceType;
+import com.stevezero.aws.api.apps.goaltender.service.resource.ResourceType;
 import com.stevezero.aws.api.apps.goaltender.storage.items.impl.UserItem;
-import com.stevezero.aws.api.exceptions.InvalidAPIResource;
+import com.stevezero.aws.api.exceptions.InvalidApiResource;
 import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
-import com.stevezero.aws.api.service.ApiResource;
+import com.stevezero.aws.api.service.resource.ApiResource;
 import com.stevezero.aws.api.storage.items.MappedItem;
 import org.joda.time.DateTime;
 import org.json.simple.JSONObject;
@@ -83,9 +83,9 @@ public class UserResource implements ApiResource {
    *
    * @param jsonString
    * @return
-   * @throws InvalidAPIResource
+   * @throws InvalidApiResource
    */
-  public static UserResource fromJson(String jsonString, UserId id) throws InvalidAPIResource {
+  public static UserResource fromJson(String jsonString, UserId id) throws InvalidApiResource {
     JSONParser jsonParser = new JSONParser();
 
     try {
@@ -101,7 +101,7 @@ public class UserResource implements ApiResource {
           new DateTime((String)json.get("lastUpdateDateTimeString")),
           new DateTime((String)json.get("reminderTimeString")));
     } catch (ParseException e) {
-      throw new InvalidAPIResource(ResourceType.USER.toString());
+      throw new InvalidApiResource(ResourceType.USER.toString());
     }
   }
 }

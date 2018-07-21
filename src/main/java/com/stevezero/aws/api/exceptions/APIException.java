@@ -1,11 +1,11 @@
-package com.stevezero.aws.goaltender.common.exceptions;
+package com.stevezero.aws.api.exceptions;
 
-import com.stevezero.aws.goaltender.api.http.StatusCode;
+import com.stevezero.aws.api.http.StatusCode;
 
 /**
  * Base class for API exceptions, checked by design.
  */
-public abstract class APIException extends Exception {
+public abstract class ApiException extends Exception {
   protected String message = "An unkown error occurred";
   protected StatusCode returnCode = StatusCode.SERVER_ERROR;
 

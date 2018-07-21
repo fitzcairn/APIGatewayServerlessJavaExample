@@ -1,4 +1,4 @@
-package com.stevezero.aws.goaltender.api;
+package com.stevezero.aws.api;
 
 import com.amazonaws.services.lambda.runtime.Context;
 

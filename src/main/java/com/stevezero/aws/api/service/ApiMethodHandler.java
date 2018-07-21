@@ -1,8 +1,9 @@
-package com.stevezero.aws.api.service.resource;
+package com.stevezero.aws.api.service;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.stevezero.aws.api.ApiGatewayProxyRequest;
 import com.stevezero.aws.api.ApiGatewayProxyResponse;
+import com.stevezero.aws.api.exceptions.ApiException;
 import com.stevezero.aws.api.storage.service.StorageService;
 
 /**
@@ -19,6 +20,6 @@ public interface ApiMethodHandler {
    */
    public ApiGatewayProxyResponse handleRequest(ApiGatewayProxyRequest request,
                                                 Context context,
-                                                StorageService storageService);
+                                                StorageService storageService) throws ApiException;
 
 }
