@@ -7,6 +7,9 @@ import com.stevezero.aws.api.storage.service.StorageService;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Super simple controllable mock storage service.
+ */
 public class MockStorageService implements StorageService {
   private final Map<String, MappedItem> storageMap = new HashMap();
 
@@ -30,7 +33,6 @@ public class MockStorageService implements StorageService {
   public void update(MappedItem item) {
     // TODO: consider simulating update if not null behavior.
     storageMap.put(item.getKey(), item);
-
   }
 
   @Override

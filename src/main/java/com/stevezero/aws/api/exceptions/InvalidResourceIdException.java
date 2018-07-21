@@ -1,4 +1,4 @@
-package com.stevezero.aws.api.exceptions.impl;
+package com.stevezero.aws.api.exceptions;
 
 import com.stevezero.aws.api.http.StatusCode;
 import com.stevezero.aws.api.exceptions.APIException;
@@ -9,7 +9,7 @@ import com.stevezero.aws.api.exceptions.APIException;
  */
 public class InvalidUserIdException extends APIException {
   public InvalidUserIdException(String id) {
-    this.message = "User ID " + id + " is not valid.";
+    this.message = "UserResource ID " + id + " is not valid.";
     this.returnCode = StatusCode.NOT_FOUND;
   }
 }

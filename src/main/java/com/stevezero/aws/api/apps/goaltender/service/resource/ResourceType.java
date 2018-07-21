@@ -1,4 +1,4 @@
-package com.stevezero.aws.api.goaltender.common;
+package com.stevezero.aws.api.apps.goaltender.service;
 
 public enum ResourceType {
   USER("user"),
