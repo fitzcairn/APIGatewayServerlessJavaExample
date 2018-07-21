@@ -7,10 +7,10 @@ import com.stevezero.aws.goaltender.api.ApiGatewayProxyRequest;
 import com.stevezero.aws.goaltender.api.ApiGatewayProxyResponse;
 import com.stevezero.aws.goaltender.api.user.data.UserId;
 import com.stevezero.aws.goaltender.api.user.methods.GetUser;
-import com.stevezero.aws.goaltender.exceptions.GoalTenderAPIException;
-import com.stevezero.aws.goaltender.exceptions.InvalidAPIMethod;
-import com.stevezero.aws.goaltender.http.Method;
-import com.stevezero.aws.goaltender.http.StatusCode;
+import com.stevezero.aws.goaltender.api.exceptions.GoalTenderAPIException;
+import com.stevezero.aws.goaltender.api.exceptions.InvalidAPIMethod;
+import com.stevezero.aws.goaltender.api.http.Method;
+import com.stevezero.aws.goaltender.api.http.StatusCode;
 import org.json.simple.parser.JSONParser;
 
 /**

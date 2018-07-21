@@ -1,6 +1,6 @@
-package com.stevezero.aws.goaltender.exceptions;
+package com.stevezero.aws.goaltender.api.exceptions;
 
-import com.stevezero.aws.goaltender.http.StatusCode;
+import com.stevezero.aws.goaltender.api.http.StatusCode;
 
 /**
  * Base class for API exceptions, checked by design.

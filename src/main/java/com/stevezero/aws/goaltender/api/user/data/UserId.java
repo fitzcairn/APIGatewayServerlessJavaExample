@@ -1,7 +1,8 @@
 package com.stevezero.aws.goaltender.api.user.data;
 
-import com.stevezero.aws.goaltender.exceptions.InvalidAPIResource;
-import com.stevezero.aws.goaltender.exceptions.InvalidUserIdException;
+import com.stevezero.aws.goaltender.common.IdentityType;
+import com.stevezero.aws.goaltender.api.exceptions.InvalidAPIResource;
+import com.stevezero.aws.goaltender.api.exceptions.InvalidUserIdException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -22,34 +23,6 @@ public class UserId {
   private static final String PATH_KEY = "user";
   private static final String TYPE_KEY = "t";
   private static final String ID_KEY = "i";
-
-  /**
-   * Supported identity providers.
-   */
-  public enum IdentityType {
-    GOOGLE("g"),
-    FACEBOOK("f");
-
-    private final String code;
-
-    IdentityType(String code) {
-      this.code = code;
-    }
-
-    @Override
-    public String toString() {
-      return code;
-    }
-
-    public static IdentityType fromString(String inputString) {
-      for (IdentityType type : IdentityType.values()) {
-        if (type.code.equalsIgnoreCase(inputString)) {
-          return type;
-        }
-      }
-      throw new IllegalArgumentException();
-    }
-  }
 
   public String getId() {
     return id;
@@ -100,7 +73,7 @@ public class UserId {
 
       // TODO: identity validation, if we're to do something more than store data against this ID.
       return new UserId(
-          IdentityType.fromString((String)userIdJson.get(TYPE_KEY)),
+          IdentityType.decode((String)userIdJson.get(TYPE_KEY)),
           (String)userIdJson.get(ID_KEY));
 
     } catch (ParseException | IllegalArgumentException e) {

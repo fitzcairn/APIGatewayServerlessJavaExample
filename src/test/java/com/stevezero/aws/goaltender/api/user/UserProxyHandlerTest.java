@@ -4,7 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.stevezero.aws.goaltender.api.ApiGatewayProxyRequest;
 import com.stevezero.aws.goaltender.api.ApiGatewayProxyResponse;
 import com.stevezero.aws.goaltender.api.TestContext;
-import com.stevezero.aws.goaltender.http.StatusCode;
+import com.stevezero.aws.goaltender.api.http.StatusCode;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

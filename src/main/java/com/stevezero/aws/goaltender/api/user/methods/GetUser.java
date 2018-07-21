@@ -3,7 +3,7 @@ package com.stevezero.aws.goaltender.api.user.methods;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.stevezero.aws.goaltender.api.ApiGatewayProxyResponse;
-import com.stevezero.aws.goaltender.http.StatusCode;
+import com.stevezero.aws.goaltender.api.http.StatusCode;
 import com.stevezero.aws.goaltender.api.user.data.UserId;
 
 /**

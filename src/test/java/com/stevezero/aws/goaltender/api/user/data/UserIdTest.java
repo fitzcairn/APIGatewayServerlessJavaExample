@@ -1,7 +1,7 @@
 package com.stevezero.aws.goaltender.api.user.data;
 
-import com.stevezero.aws.goaltender.exceptions.InvalidAPIResource;
-import com.stevezero.aws.goaltender.exceptions.InvalidUserIdException;
+import com.stevezero.aws.goaltender.api.exceptions.InvalidAPIResource;
+import com.stevezero.aws.goaltender.api.exceptions.InvalidUserIdException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
