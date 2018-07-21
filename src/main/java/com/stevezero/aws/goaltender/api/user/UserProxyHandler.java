@@ -5,19 +5,21 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.stevezero.aws.goaltender.api.ApiGatewayProxyRequest;
 import com.stevezero.aws.goaltender.api.ApiGatewayProxyResponse;
-import com.stevezero.aws.goaltender.api.user.data.UserId;
+import com.stevezero.aws.goaltender.api.exceptions.InvalidAPIResource;
+import com.stevezero.aws.goaltender.api.exceptions.InvalidUserIdException;
 import com.stevezero.aws.goaltender.api.user.methods.GetUser;
-import com.stevezero.aws.goaltender.api.exceptions.GoalTenderAPIException;
+import com.stevezero.aws.goaltender.api.exceptions.APIException;
 import com.stevezero.aws.goaltender.api.exceptions.InvalidAPIMethod;
 import com.stevezero.aws.goaltender.api.http.Method;
 import com.stevezero.aws.goaltender.api.http.StatusCode;
+import com.stevezero.aws.goaltender.common.UserId;
 import org.json.simple.parser.JSONParser;
 
 /**
  * Entry point for handling methods for the User API.
  */
 public class UserProxyHandler implements RequestHandler<ApiGatewayProxyRequest, ApiGatewayProxyResponse> {
-  private final JSONParser parser = new JSONParser();
+  private static final String RESOURCE_NAME = "user";
 
   public ApiGatewayProxyResponse handleRequest(ApiGatewayProxyRequest request, Context context) {
     ApiGatewayProxyResponse.Builder responseBuilder = new ApiGatewayProxyResponse.Builder();
@@ -28,7 +30,7 @@ public class UserProxyHandler implements RequestHandler<ApiGatewayProxyRequest, 
 
     try {
       // Pull out the ID.
-      UserId id = UserId.fromPathString(request.getPath());
+      UserId id = extractIdFromPath(request.getPath());
 
       // Hand off to the correct handler, based on method.
       switch(Method.valueOf(request.getHttpMethod())) {
@@ -42,7 +44,7 @@ public class UserProxyHandler implements RequestHandler<ApiGatewayProxyRequest, 
           // No handler for method.
           throw new InvalidAPIMethod(request.getHttpMethod());
       }
-    } catch(GoalTenderAPIException e) {
+    } catch(APIException e) {
       return responseBuilder
           .withStatusCode(e.getReturnCode())
           .withBody(e.toString())
@@ -53,5 +55,18 @@ public class UserProxyHandler implements RequestHandler<ApiGatewayProxyRequest, 
           .withStatusCode(StatusCode.SERVER_ERROR)
           .build();
     }
+  }
+
+  // Visible for testing.
+  public UserId extractIdFromPath(String idPathString)
+      throws InvalidAPIResource, InvalidUserIdException {
+    // Expect: /user/ID
+    String[] components = idPathString.split("/");
+
+    // Make sure we have expected input.
+    if (components.length != 3 || !RESOURCE_NAME.equals(components[1]))
+      throw new InvalidAPIResource("Invalid API call.");
+
+    return UserId.fromEncoded(components[2]);
   }
 }

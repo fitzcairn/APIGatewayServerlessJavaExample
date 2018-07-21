@@ -1,6 +1,5 @@
-package com.stevezero.aws.goaltender.api.user.data;
+package com.stevezero.aws.goaltender.common;
 
-import com.stevezero.aws.goaltender.api.exceptions.InvalidAPIResource;
 import com.stevezero.aws.goaltender.api.exceptions.InvalidUserIdException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,7 +12,7 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests for the GetRequest class.
+ * Tests for the UserIdTest class.
  */
 public class UserIdTest {
   @BeforeClass
@@ -21,30 +20,12 @@ public class UserIdTest {
   }
 
   @Test
-  public void testFromPathOk() throws InvalidAPIResource, InvalidUserIdException {
-    // {"t": "g","i": "1234"}
-    String testIdString = "eyJ0IjogImciLCJpIjogIjEyMzQifQ==";
-    String path = "/user/" + testIdString;
+  public void testToIdString() throws InvalidUserIdException {
+    UserId userId = new UserId("1234", IdentityType.GOOGLE);
 
-    UserId result = UserId.fromPathString(path);
-    assertEquals("1234", result.getId());
-    assertEquals(UserId.IdentityType.GOOGLE, result.getType());
-  }
-
-  @Test(expected = InvalidAPIResource.class)
-  public void testFromPathInvalidResource() throws InvalidAPIResource, InvalidUserIdException {
     // {"t": "g","i": "1234"}
-    String testIdString = "eyJ0IjogImciLCJpIjogIjEyMzQifQ==";
-    String path = "/notauser/" + testIdString;
-    UserId result = UserId.fromPathString(path);
-  }
-
-  @Test(expected = InvalidAPIResource.class)
-  public void testFromPathInvalidPath() throws InvalidAPIResource, InvalidUserIdException {
-    // {"t": "g","i": "1234"}
-    String testIdString = "eyJ0IjogImciLCJpIjogIjEyMzQifQ==";
-    String path = "/oops/user/" + testIdString;
-    UserId result = UserId.fromPathString(path);
+    String expected = "eyJ0IjoiZyIsImkiOiIxMjM0In0";
+    assertEquals(expected, userId.toEncoded());
   }
 
   @Test
@@ -52,35 +33,35 @@ public class UserIdTest {
     // {"t": "g","i": "1234"}
     String testIdString = "eyJ0IjogImciLCJpIjogIjEyMzQifQ==";
 
-    UserId result = UserId.fromIdString(testIdString);
+    UserId result = UserId.fromEncoded(testIdString);
     assertEquals("1234", result.getId());
-    assertEquals(UserId.IdentityType.GOOGLE, result.getType());
+    assertEquals(IdentityType.GOOGLE, result.getType());
   }
 
   @Test(expected = InvalidUserIdException.class)
   public void testFromIdStringInvalidBase64() throws InvalidUserIdException {
-    UserId.fromIdString("///");
+    UserId.fromEncoded("///");
   }
 
   @Test(expected = InvalidUserIdException.class)
   public void testFromIdStringInvalidJson() throws InvalidUserIdException {
     // {t: "g",i: "1234"} <-- missing quotes on keys, invalid
     String testIdString = "e3Q6ICJnIixpOiAiMTIzNCJ9";
-    UserId.fromIdString("testIdString");
+    UserId.fromEncoded("testIdString");
   }
 
   @Test(expected = InvalidUserIdException.class)
   public void testFromIdStringInvalidIdentity() throws InvalidUserIdException {
     // {"t": "XX","i": "1234"}
     String testIdString = "eyJ0IjogIlhYIiwiaSI6ICIxMjM0In0=";
-    UserId.fromIdString(testIdString);
+    UserId.fromEncoded(testIdString);
   }
 
   @Test
   public void testToString() throws InvalidUserIdException {
     String json = "{\"t\": \"g\",\"i\": \"1234\"}";
     String testIdString = "eyJ0IjogImciLCJpIjogIjEyMzQifQ==";
-    UserId parsed = UserId.fromIdString(testIdString);
+    UserId parsed = UserId.fromEncoded(testIdString);
 
     try {
       JSONObject userIdJson = (JSONObject)new JSONParser().parse(json);

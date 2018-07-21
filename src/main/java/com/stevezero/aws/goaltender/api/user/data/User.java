@@ -1,5 +1,8 @@
 package com.stevezero.aws.goaltender.api.user.data;
 
+import com.stevezero.aws.goaltender.common.UserId;
+import com.stevezero.aws.goaltender.storage.items.UserItem;
+
 /**
  * Simple pojo representing a user.
  */
@@ -10,14 +13,8 @@ public class User {
     this.id = id;
   }
 
-  /**
-   * Builder class for the user.
-   */
-  public static class UserBuilder {
-    private UserId id;
-    public User build() {
-      return new User(id);
-    }
+  public static User fromUserItem(UserItem userItem) {
+    return new User(userItem.getUserId());
   }
 
 }

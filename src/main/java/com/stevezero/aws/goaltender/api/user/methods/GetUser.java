@@ -4,7 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.stevezero.aws.goaltender.api.ApiGatewayProxyResponse;
 import com.stevezero.aws.goaltender.api.http.StatusCode;
-import com.stevezero.aws.goaltender.api.user.data.UserId;
+import com.stevezero.aws.goaltender.common.UserId;
 
 /**
  * Look up user and return information, or not found.

@@ -4,7 +4,11 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.stevezero.aws.goaltender.api.ApiGatewayProxyRequest;
 import com.stevezero.aws.goaltender.api.ApiGatewayProxyResponse;
 import com.stevezero.aws.goaltender.api.TestContext;
+import com.stevezero.aws.goaltender.api.exceptions.InvalidAPIResource;
+import com.stevezero.aws.goaltender.api.exceptions.InvalidUserIdException;
 import com.stevezero.aws.goaltender.api.http.StatusCode;
+import com.stevezero.aws.goaltender.common.IdentityType;
+import com.stevezero.aws.goaltender.common.UserId;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -31,9 +35,42 @@ public class UserProxyHandlerTest {
   }
 
   @Test
-  public void testHandleRequest() {
-    Context context = createContext();
+  public void testPathOk() throws InvalidAPIResource, InvalidUserIdException {
     UserProxyHandler requestHandler = new UserProxyHandler();
+
+    // {"t": "g","i": "1234"}
+    String testIdString = "eyJ0IjogImciLCJpIjogIjEyMzQifQ==";
+    String path = "/user/" + testIdString;
+
+    UserId result = requestHandler.extractIdFromPath(path);
+    assertEquals("1234", result.getId());
+    assertEquals(IdentityType.GOOGLE, result.getType());
+  }
+
+  @Test(expected = InvalidAPIResource.class)
+  public void testPathInvalidResource() throws InvalidAPIResource, InvalidUserIdException {
+    UserProxyHandler requestHandler = new UserProxyHandler();
+
+    // {"t": "g","i": "1234"}
+    String testIdString = "eyJ0IjogImciLCJpIjogIjEyMzQifQ==";
+    String path = "/notauser/" + testIdString;
+    UserId result = requestHandler.extractIdFromPath(path);
+  }
+
+  @Test(expected = InvalidAPIResource.class)
+  public void testPathInvalidPath() throws InvalidAPIResource, InvalidUserIdException {
+    UserProxyHandler requestHandler = new UserProxyHandler();
+
+    // {"t": "g","i": "1234"}
+    String testIdString = "eyJ0IjogImciLCJpIjogIjEyMzQifQ==";
+    String path = "/oops/user/" + testIdString;
+    UserId result = requestHandler.extractIdFromPath(path);
+  }
+
+  @Test
+  public void testHandleRequest() {
+    UserProxyHandler requestHandler = new UserProxyHandler();
+    Context context = createContext();
 
     // Create a fake request.
     ApiGatewayProxyRequest request = new ApiGatewayProxyRequest()
@@ -48,8 +85,8 @@ public class UserProxyHandlerTest {
 
   @Test
   public void testHandleRequestMalformedId() {
-    Context context = createContext();
     UserProxyHandler requestHandler = new UserProxyHandler();
+    Context context = createContext();
 
     // Create a fake request with a malformed ID.
     ApiGatewayProxyRequest request = new ApiGatewayProxyRequest()
