@@ -2,10 +2,9 @@ package com.stevezero.aws.api.apps.goaltender.storage.items.impl;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
 import com.stevezero.aws.api.apps.goaltender.id.impl.UserId;
+import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
 import com.stevezero.aws.api.storage.items.MappedItem;
-import org.joda.time.DateTime;
 
 /**
  * Mapped POJO for a Dynamo UserResource item.
@@ -22,8 +21,6 @@ public class UserItem implements MappedItem {
 
   // Not mapped.
   private UserId userId;
-  private DateTime lastUpdateDateTime;
-  private DateTime reminderTime;
 
   @DynamoDBHashKey(attributeName="key")
   public String getKey() {
@@ -33,7 +30,7 @@ public class UserItem implements MappedItem {
     this.key = key;
   }
 
-  @DynamoDBHashKey(attributeName="lastUpdateDateTime")
+  @DynamoDBHashKey(attributeName="lastUpdateDateTimeString")
   public String getLastUpdateDateTimeString() {
     return lastUpdateDateTimeString;
   }
@@ -57,7 +54,7 @@ public class UserItem implements MappedItem {
     this.hasRemindersOn = hasRemindersOn;
   }
 
-  @DynamoDBHashKey(attributeName="reminderTime")
+  @DynamoDBHashKey(attributeName="reminderTimeString")
   public String getReminderTimeString() {
     return reminderTimeString;
   }
@@ -66,19 +63,7 @@ public class UserItem implements MappedItem {
   }
 
 
-  // Unmapped utility getters, with lazy createHandlers.
-  public DateTime getReminderTime() {
-    if (reminderTime == null)
-      this.reminderTime = new DateTime(reminderTimeString);
-    return reminderTime;
-  }
-
-  public DateTime getLastUpdateDateTime() {
-    if (lastUpdateDateTime == null)
-      this.lastUpdateDateTime = new DateTime(lastUpdateDateTimeString);
-    return lastUpdateDateTime;
-  }
-
+  // Unmapped utility getter
   // Note: we can safely depend that the key is defined, as it's the primary key in Dynamo.
   public UserId getUserId() throws InvalidResourceIdException {
     if (userId == null)

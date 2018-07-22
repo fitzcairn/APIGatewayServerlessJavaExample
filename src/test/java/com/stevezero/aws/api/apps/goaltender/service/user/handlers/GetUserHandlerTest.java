@@ -1,23 +1,19 @@
 package com.stevezero.aws.api.apps.goaltender.service.user.handlers;
 
-import com.amazonaws.services.lambda.runtime.Context;
 import com.stevezero.aws.api.ApiGatewayProxyRequest;
 import com.stevezero.aws.api.ApiGatewayProxyResponse;
 import com.stevezero.aws.api.MockContext;
-import com.stevezero.aws.api.apps.goaltender.service.user.UserProxyHandler;
 import com.stevezero.aws.api.apps.goaltender.storage.items.impl.UserItem;
+import com.stevezero.aws.api.exceptions.ApiException;
+import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
 import com.stevezero.aws.api.http.StatusCode;
 import com.stevezero.aws.api.service.MockStorageService;
-import com.stevezero.aws.api.storage.service.StorageService;
-import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests for the public class GetUserHandler { class.
+ * Tests for the public class GetUserHandler class.
  */
 public class GetUserHandlerTest {
   // {"t": "g","i": "1234"}
@@ -25,7 +21,7 @@ public class GetUserHandlerTest {
   private final GetUserHandler requestHandler = new GetUserHandler();
 
   @Test
-  public void testHandleRequest() {
+  public void testHandleRequest() throws ApiException {
     MockContext context = new MockContext();
     MockStorageService storageService = new MockStorageService();
 
@@ -43,8 +39,8 @@ public class GetUserHandlerTest {
     assertEquals(StatusCode.OK.getCode(), output.getStatusCode());
   }
 
-  @Test
-  public void testHandleRequestMalformedId() {
+  @Test(expected = InvalidResourceIdException.class)
+  public void testHandleRequestMalformedId() throws ApiException {
     MockContext context = new MockContext();
     MockStorageService storageService = new MockStorageService();
 
@@ -59,7 +55,7 @@ public class GetUserHandlerTest {
   }
 
   @Test
-  public void testHandleRequestNotFound() {
+  public void testHandleRequestNotFound() throws ApiException {
     MockContext context = new MockContext();
     MockStorageService storageService = new MockStorageService();
 

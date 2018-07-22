@@ -1,7 +1,5 @@
 package com.stevezero.aws.api.storage.items;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-
 /**
  * Describes a POJO mapped to a DynamoDb Item.
  */

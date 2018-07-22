@@ -5,14 +5,13 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.stevezero.aws.api.ApiGatewayProxyRequest;
 import com.stevezero.aws.api.ApiGatewayProxyResponse;
 import com.stevezero.aws.api.apps.goaltender.id.IdExtractor;
-import com.stevezero.aws.api.exceptions.ApiException;
-import com.stevezero.aws.api.service.ApiMethodHandler;
 import com.stevezero.aws.api.apps.goaltender.service.resource.ResourceType;
 import com.stevezero.aws.api.apps.goaltender.service.resource.impl.UserResource;
 import com.stevezero.aws.api.apps.goaltender.storage.items.impl.UserItem;
-import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
+import com.stevezero.aws.api.exceptions.ApiException;
 import com.stevezero.aws.api.http.StatusCode;
 import com.stevezero.aws.api.id.ResourceId;
+import com.stevezero.aws.api.service.ApiMethodHandler;
 import com.stevezero.aws.api.storage.service.StorageService;
 
 /**
@@ -29,7 +28,6 @@ public class GetUserHandler implements ApiMethodHandler {
     ApiGatewayProxyResponse.Builder responseBuilder = new ApiGatewayProxyResponse.Builder();
     LambdaLogger logger = context.getLogger();
 
-
     logger.log("Executing GetUserHandler");
 
     // Pull out the ID.
@@ -43,7 +41,7 @@ public class GetUserHandler implements ApiMethodHandler {
           .withStatusCode(StatusCode.NOT_FOUND);
     } else {
       // Re-encode into an API resource.
-      UserResource userResource = UserResource.fromUserItem(userItem);
+      UserResource userResource = UserResource.of(userItem);
 
       responseBuilder
           .withBody(userResource.toJsonString())
