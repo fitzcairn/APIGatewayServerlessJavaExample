@@ -99,8 +99,8 @@ public class UserResourceTest {
     assertEquals(expectedItem.getKey(), resultItem.getKey());
     assertEquals(expectedItem.getLastUpdateDateTimeString(), resultItem.getLastUpdateDateTimeString());
     assertEquals(expectedItem.getReminderTimeString(), resultItem.getReminderTimeString());
-    assertEquals(expectedItem.hasRemindersOn(), resultItem.hasRemindersOn());
-    assertEquals(expectedItem.hasSeenFtux(), resultItem.hasSeenFtux());
+    assertEquals(expectedItem.getHasRemindersOn(), resultItem.getHasRemindersOn());
+    assertEquals(expectedItem.getHasSeenFtux(), resultItem.getHasSeenFtux());
   }
 
   @Test
@@ -120,8 +120,8 @@ public class UserResourceTest {
     assertEquals(expectedItem.getKey(), resultItem.getKey());
     assertEquals(expectedItem.getLastUpdateDateTimeString(), resultItem.getLastUpdateDateTimeString());
     assertEquals(expectedItem.getReminderTimeString(), resultItem.getReminderTimeString());
-    assertEquals(expectedItem.hasRemindersOn(), resultItem.hasRemindersOn());
-    assertEquals(expectedItem.hasSeenFtux(), resultItem.hasSeenFtux());
+    assertEquals(expectedItem.getHasRemindersOn(), resultItem.getHasRemindersOn());
+    assertEquals(expectedItem.getHasSeenFtux(), resultItem.getHasSeenFtux());
   }
 
   @Test
@@ -139,8 +139,8 @@ public class UserResourceTest {
     assertEquals(expectedItem.getKey(), resultItem.getKey());
     assertEquals(expectedItem.getLastUpdateDateTimeString(), resultItem.getLastUpdateDateTimeString());
     assertEquals(expectedItem.getReminderTimeString(), resultItem.getReminderTimeString());
-    assertEquals(expectedItem.hasRemindersOn(), resultItem.hasRemindersOn());
-    assertEquals(expectedItem.hasSeenFtux(), resultItem.hasSeenFtux());
+    assertEquals(expectedItem.getHasRemindersOn(), resultItem.getHasRemindersOn());
+    assertEquals(expectedItem.getHasSeenFtux(), resultItem.getHasSeenFtux());
   }
 
   @Test
@@ -156,7 +156,7 @@ public class UserResourceTest {
     assertEquals(expectedItem.getKey(), resultItem.getKey());
     assertEquals(expectedItem.getLastUpdateDateTimeString(), resultItem.getLastUpdateDateTimeString());
     assertEquals(expectedItem.getReminderTimeString(), resultItem.getReminderTimeString());
-    assertEquals(expectedItem.hasRemindersOn(), resultItem.hasRemindersOn());
-    assertEquals(expectedItem.hasSeenFtux(), resultItem.hasSeenFtux());
+    assertEquals(expectedItem.getHasRemindersOn(), resultItem.getHasRemindersOn());
+    assertEquals(expectedItem.getHasSeenFtux(), resultItem.getHasSeenFtux());
   }
 }

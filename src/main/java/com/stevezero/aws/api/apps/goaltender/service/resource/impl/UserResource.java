@@ -77,8 +77,8 @@ public class UserResource implements ApiResource {
     if (userItem.getKey() == null) throw new InvalidResourceIdException("");
 
     return new UserResource(UserId.fromEncoded(userItem.getKey()),
-        userItem.hasSeenFtux(),
-        userItem.hasRemindersOn(),
+        userItem.getHasSeenFtux(),
+        userItem.getHasRemindersOn(),
         userItem.getLastUpdateDateTimeString(),
         userItem.getReminderTimeString());
   }

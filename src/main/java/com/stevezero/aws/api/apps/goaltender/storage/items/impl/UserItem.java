@@ -33,8 +33,8 @@ public class UserItem implements MappedItem {
   }
 
   @DynamoDBTyped(DynamoDBAttributeType.BOOL)
-  @DynamoDBAttribute(attributeName="hasSeenFtux")
-  public boolean hasSeenFtux() {
+  @DynamoDBAttribute(attributeName="getHasSeenFtux")
+  public boolean getHasSeenFtux() {
     return hasSeenFtux;
   }
   public void setHasSeenFtux(boolean hasSeenFtux) {
@@ -42,8 +42,8 @@ public class UserItem implements MappedItem {
   }
 
   @DynamoDBTyped(DynamoDBAttributeType.BOOL)
-  @DynamoDBAttribute(attributeName="hasRemindersOn")
-  public boolean hasRemindersOn() {
+  @DynamoDBAttribute(attributeName="getHasRemindersOn")
+  public boolean getHasRemindersOn() {
     return hasRemindersOn;
   }
   public void setHasRemindersOn(boolean hasRemindersOn) {

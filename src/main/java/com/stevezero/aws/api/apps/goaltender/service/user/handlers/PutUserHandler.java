@@ -8,6 +8,7 @@ import com.stevezero.aws.api.apps.goaltender.id.IdExtractor;
 import com.stevezero.aws.api.apps.goaltender.id.impl.UserId;
 import com.stevezero.aws.api.apps.goaltender.service.resource.ResourceType;
 import com.stevezero.aws.api.apps.goaltender.service.resource.impl.UserResource;
+import com.stevezero.aws.api.apps.goaltender.storage.items.impl.UserItem;
 import com.stevezero.aws.api.exceptions.ApiException;
 import com.stevezero.aws.api.exceptions.InvalidApiResource;
 import com.stevezero.aws.api.http.StatusCode;
@@ -42,6 +43,9 @@ public class PutUserHandler implements ApiMethodHandler {
 
     // Upsert new item and return it.
     storageService.update(resource.toItem());
+
+    logger.log("hasRemindersOn: " + ((UserItem)resource.toItem()).getHasRemindersOn());
+    logger.log("hasSeenFtux: " + ((UserItem)resource.toItem()).getHasSeenFtux());
 
     return responseBuilder
         .withBody(resource.toJsonString())
