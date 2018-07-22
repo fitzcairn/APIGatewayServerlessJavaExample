@@ -1,19 +1,11 @@
 package com.stevezero.aws.api.apps.goaltender.service.resource;
 
-import com.stevezero.aws.api.ApiGatewayProxyRequest;
-import com.stevezero.aws.api.ApiGatewayProxyResponse;
-import com.stevezero.aws.api.MockContext;
 import com.stevezero.aws.api.apps.goaltender.id.impl.UserId;
 import com.stevezero.aws.api.apps.goaltender.service.resource.impl.UserResource;
-import com.stevezero.aws.api.apps.goaltender.service.user.handlers.PutUserHandler;
 import com.stevezero.aws.api.apps.goaltender.storage.items.impl.UserItem;
-import com.stevezero.aws.api.exceptions.ApiException;
 import com.stevezero.aws.api.exceptions.InvalidApiResource;
 import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
-import com.stevezero.aws.api.http.MethodType;
-import com.stevezero.aws.api.http.StatusCode;
 import com.stevezero.aws.api.id.IdentityType;
-import com.stevezero.aws.api.service.MockStorageService;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

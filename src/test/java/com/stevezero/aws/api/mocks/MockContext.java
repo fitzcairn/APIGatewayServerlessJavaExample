@@ -1,4 +1,4 @@
-package com.stevezero.aws.api;
+package com.stevezero.aws.api.mocks;
 
 import com.amazonaws.services.lambda.runtime.ClientContext;
 import com.amazonaws.services.lambda.runtime.CognitoIdentity;

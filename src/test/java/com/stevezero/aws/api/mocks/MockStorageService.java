@@ -1,4 +1,4 @@
-package com.stevezero.aws.api.service;
+package com.stevezero.aws.api.mocks;
 
 import com.stevezero.aws.api.id.ResourceId;
 import com.stevezero.aws.api.storage.items.MappedItem;

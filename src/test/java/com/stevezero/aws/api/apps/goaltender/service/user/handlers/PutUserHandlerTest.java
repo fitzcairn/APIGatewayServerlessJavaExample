@@ -2,7 +2,7 @@ package com.stevezero.aws.api.apps.goaltender.service.user.handlers;
 
 import com.stevezero.aws.api.ApiGatewayProxyRequest;
 import com.stevezero.aws.api.ApiGatewayProxyResponse;
-import com.stevezero.aws.api.MockContext;
+import com.stevezero.aws.api.mocks.MockContext;
 import com.stevezero.aws.api.apps.goaltender.id.impl.UserId;
 import com.stevezero.aws.api.apps.goaltender.service.resource.impl.UserResource;
 import com.stevezero.aws.api.apps.goaltender.storage.items.impl.UserItem;
@@ -11,14 +11,14 @@ import com.stevezero.aws.api.exceptions.InvalidApiResource;
 import com.stevezero.aws.api.http.MethodType;
 import com.stevezero.aws.api.http.StatusCode;
 import com.stevezero.aws.api.id.IdentityType;
-import com.stevezero.aws.api.service.MockStorageService;
+import com.stevezero.aws.api.mocks.MockStorageService;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for the public class PutUserHandler class.
+ * Tests for the PutUserHandler class.
  */
 public class PutUserHandlerTest {
   // {"t": "g","i": "1234"}

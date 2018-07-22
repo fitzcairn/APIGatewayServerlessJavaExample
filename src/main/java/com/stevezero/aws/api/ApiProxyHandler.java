@@ -20,12 +20,10 @@ import java.util.Map;
  */
 public abstract class ApiProxyHandler implements RequestHandler<ApiGatewayProxyRequest, ApiGatewayProxyResponse> {
   protected final StorageService storageService;
-  protected final ResourceType resourceType;
   protected final Map<MethodType, ApiMethodHandler> methodHandlers = new EnumMap<MethodType, ApiMethodHandler>(MethodType.class);
 
-  protected ApiProxyHandler(StorageService storageService, ResourceType resourceType) {
+  protected ApiProxyHandler(StorageService storageService) {
     this.storageService = storageService;
-    this.resourceType = resourceType;
     this.createHandlers();
   }
 
@@ -54,7 +52,7 @@ public abstract class ApiProxyHandler implements RequestHandler<ApiGatewayProxyR
         throw new InvalidApiMethod(request.getHttpMethod());
 
       // Invoke the method handler
-      return methodHandlers.get(resourceType).handleRequest(request, context, storageService);
+      return handler.handleRequest(request, context, storageService);
     } catch(ApiException e) { // Catch API exceptions.
       return responseBuilder
           .withStatusCode(e.getReturnCode())
