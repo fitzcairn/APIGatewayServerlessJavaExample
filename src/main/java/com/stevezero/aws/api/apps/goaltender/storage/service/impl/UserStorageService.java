@@ -1,11 +1,10 @@
 package com.stevezero.aws.api.apps.goaltender.storage.service.impl;
 
-import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.stevezero.aws.api.apps.goaltender.storage.items.impl.UserItem;
 import com.stevezero.aws.api.id.ResourceId;
 import com.stevezero.aws.api.storage.items.MappedItem;
@@ -16,18 +15,13 @@ import com.stevezero.aws.api.storage.service.StorageService;
  * Lightweight storage service for UserResource resource.  Encapsulates dealing with DynamoDb.
  */
 public class UserStorageService implements StorageService {
-  private final DynamoDB dynamoDb;
   private final DynamoDBMapper dynamoDbMapper;
-  private final AmazonDynamoDBClient client;
-  private static final String TABLE = "goaltender-user";
-
-  // TODO: Can we hit a VIP or something similar?
-  private static final Regions REGION = Regions.US_WEST_2;
 
   public UserStorageService() {
-    this.client = new AmazonDynamoDBClient();
-    client.setRegion(Region.getRegion(REGION));
-    this.dynamoDb = new DynamoDB(client);
+    // TODO: Can we hit a VIP or something similar instead of hard-coding region?
+    AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
+        .withRegion(Regions.US_WEST_2)
+        .build();
     this.dynamoDbMapper = new DynamoDBMapper(client);
   }
 

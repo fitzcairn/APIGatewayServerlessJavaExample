@@ -107,4 +107,21 @@ public class PutUserHandlerTest {
     ApiGatewayProxyResponse output = requestHandler.handleRequest(request, context, storageService);
     assert false; // Should never reach here.
   }
+
+  @Test(expected = InvalidApiResource.class)
+  public void testHandleResourcePathNoBody() throws ApiException {
+    MockContext context = new MockContext();
+    MockStorageService storageService = new MockStorageService();
+
+    UserId testId = new UserId("1234", IdentityType.GOOGLE);
+
+    // Attempt the PUT.  This should blow up with a InvalidApiResource exception.
+    ApiGatewayProxyRequest request = new ApiGatewayProxyRequest()
+        .setPath("/user/" + testId.toEncoded())
+        .setHttpMethod(MethodType.PUT.toString())
+        .setBase64Encoded(false);
+
+    ApiGatewayProxyResponse output = requestHandler.handleRequest(request, context, storageService);
+    assert false; // Should never reach here.
+  }
 }

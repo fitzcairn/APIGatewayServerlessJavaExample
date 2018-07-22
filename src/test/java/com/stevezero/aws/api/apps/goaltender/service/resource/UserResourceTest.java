@@ -9,7 +9,6 @@ import com.stevezero.aws.api.id.IdentityType;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for the public class UserResource.

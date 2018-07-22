@@ -72,10 +72,11 @@ public class UserResource implements ApiResource {
   }
 
   public static UserResource of(UserItem userItem) throws InvalidResourceIdException {
-    // Without an ID, invalid resource.  TODO: probably need a better exception for this error, its a storage error.
-    if (userItem.getUserId() == null) throw new InvalidResourceIdException("");
+    // Without an ID, invalid resource.
+    // TODO: probably need a better exception for this error, its a storage error.
+    if (userItem.getKey() == null) throw new InvalidResourceIdException("");
 
-    return new UserResource(userItem.getUserId(),
+    return new UserResource(UserId.fromEncoded(userItem.getKey()),
         userItem.hasSeenFtux(),
         userItem.hasRemindersOn(),
         userItem.getLastUpdateDateTimeString(),
@@ -101,6 +102,9 @@ public class UserResource implements ApiResource {
     JSONParser jsonParser = new JSONParser();
 
     try {
+      if (jsonString == null)
+        throw new ParseException(0);
+
       JSONObject json = (JSONObject) jsonParser.parse(jsonString);
 
       String userId = (String)json.get("userId");
