@@ -8,9 +8,9 @@ import com.stevezero.aws.api.storage.items.MappedItem;
 
 
 /**
- * Lightweight storage service Users.  Encapsulates dealing with DynamoDb.
+ * Lightweight storage service for Goals.  Encapsulates dealing with DynamoDb.
  */
-public class UserStorageService extends DynamoStorageService {
+public class GoalStorageService extends DynamoStorageService {
 
   /**
    * Update a user, overwriting fields already there, or creating if not there.
