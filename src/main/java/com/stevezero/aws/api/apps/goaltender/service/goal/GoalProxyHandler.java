@@ -1,4 +1,4 @@
-package com.stevezero.aws.api.apps.goaltender.service.user;
+package com.stevezero.aws.api.apps.goaltender.service.goal;
 
 import com.stevezero.aws.api.ApiProxyHandler;
 import com.stevezero.aws.api.apps.goaltender.service.user.handlers.GetUserHandler;
@@ -8,16 +8,16 @@ import com.stevezero.aws.api.http.MethodType;
 import com.stevezero.aws.api.storage.service.StorageService;
 
 /**
- * Entry point for handling handlers for the User API.
+ * Entry point for handling handlers for the Goal API.
  */
-public class UserProxyHandler extends ApiProxyHandler {
+public class GoalProxyHandler extends ApiProxyHandler {
 
-  public UserProxyHandler() {
+  public GoalProxyHandler() {
     super(new UserStorageService());
   }
 
   // For testing only.
-  public UserProxyHandler(StorageService storageService) {
+  public GoalProxyHandler(StorageService storageService) {
     super(storageService);
   }
 

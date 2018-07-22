@@ -10,7 +10,7 @@ import org.json.simple.parser.ParseException;
 import java.util.Base64;
 
 /**
- * Simple UserId pojo.
+ * UserId pojo, with translation methods.
  */
 public class UserId implements ResourceId {
   private static final Base64.Encoder ENCODER = Base64.getUrlEncoder();

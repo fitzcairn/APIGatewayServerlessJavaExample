@@ -1,4 +1,4 @@
-package com.stevezero.aws.api.apps.goaltender.service.user.handlers;
+package com.stevezero.aws.api.apps.goaltender.service.goal.handlers;
 
 import com.stevezero.aws.api.ApiGatewayProxyRequest;
 import com.stevezero.aws.api.ApiGatewayProxyResponse;
@@ -18,9 +18,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for the PutUserHandler class.
+ * Tests for the PutGoalHandler class.
  */
-public class PutUserHandlerTest {
+public class PutGoalHandlerTest {
   // {"t": "g","i": "1234"}
   private final String testIdString = "eyJ0IjoiZyIsImkiOiIxMjM0In0=";
   private final UserResource testResource = new UserResource(
@@ -30,7 +30,7 @@ public class PutUserHandlerTest {
       "2018-07-22T02:33:57+00:00",
       "2:33:57+00:00");
 
-  private final PutUserHandler requestHandler = new PutUserHandler();
+  private final PutGoalHandler requestHandler = new PutGoalHandler();
 
   @Test
   public void testHandleRequestCreateNew() throws ApiException {

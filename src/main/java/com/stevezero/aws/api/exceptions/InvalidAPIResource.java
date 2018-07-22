@@ -1,6 +1,6 @@
 package com.stevezero.aws.api.exceptions;
 
-import com.stevezero.aws.api.apps.goaltender.service.resource.ResourceType;
+import com.stevezero.aws.api.apps.goaltender.resource.ResourceType;
 import com.stevezero.aws.api.http.StatusCode;
 
 /**

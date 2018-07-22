@@ -1,7 +1,7 @@
-package com.stevezero.aws.api.apps.goaltender.service.resource.impl;
+package com.stevezero.aws.api.apps.goaltender.resource.impl;
 
 import com.stevezero.aws.api.apps.goaltender.id.impl.UserId;
-import com.stevezero.aws.api.apps.goaltender.service.resource.ResourceType;
+import com.stevezero.aws.api.apps.goaltender.resource.ResourceType;
 import com.stevezero.aws.api.apps.goaltender.storage.items.impl.UserItem;
 import com.stevezero.aws.api.exceptions.InvalidApiResource;
 import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
