@@ -4,7 +4,7 @@ import com.stevezero.aws.api.apps.goaltender.id.impl.UserId;
 import com.stevezero.aws.api.apps.goaltender.resource.GoalTenderResourceType;
 import com.stevezero.aws.api.apps.goaltender.storage.items.impl.UserItem;
 import com.stevezero.aws.api.exceptions.InvalidApiResource;
-import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
+import com.stevezero.aws.api.exceptions.InvalidApiResourceId;
 import com.stevezero.aws.api.id.ApiResourceId;
 import com.stevezero.aws.api.resource.ApiResource;
 import com.stevezero.aws.api.storage.items.MappedItem;
@@ -44,12 +44,12 @@ public class UserResource implements ApiResource {
   /**
    * Parse a backend UserItem into an ApiResource.
    * @param userItem the UserItem instance.
-   * @throws InvalidResourceIdException on error parsing the Item key.
+   * @throws InvalidApiResourceId on error parsing the Item key.
    */
-  public UserResource(UserItem userItem) throws InvalidResourceIdException {
+  public UserResource(UserItem userItem) throws InvalidApiResourceId {
     // Without an ID, invalid resource.
     // TODO: probably need a better exception for this error, its a storage error.
-    if (userItem.getKey() == null) throw new InvalidResourceIdException("");
+    if (userItem.getKey() == null) throw new InvalidApiResourceId("");
 
     this.id = new UserId(userItem.getKey());
     this.hasSeenFtux = userItem.getHasSeenFtux();
@@ -84,10 +84,10 @@ public class UserResource implements ApiResource {
    *           }
    *
    * @param jsonString the JSON representation of the resource.
-   * @throws InvalidResourceIdException when the ID is corrupted and undecodable.
+   * @throws InvalidApiResourceId when the ID is corrupted and undecodable.
    * @throws InvalidApiResource if the JSON is malformed.
    */
-  public UserResource(String jsonString) throws InvalidResourceIdException, InvalidApiResource {
+  public UserResource(String jsonString) throws InvalidApiResourceId, InvalidApiResource {
     try {
       if (jsonString == null)
         throw new ParseException(0);

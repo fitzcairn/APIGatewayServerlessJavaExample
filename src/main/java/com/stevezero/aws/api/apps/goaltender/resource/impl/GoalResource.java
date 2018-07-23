@@ -1,10 +1,11 @@
 package com.stevezero.aws.api.apps.goaltender.resource.impl;
 
 import com.stevezero.aws.api.apps.goaltender.id.impl.GoalId;
+import com.stevezero.aws.api.apps.goaltender.id.impl.UserId;
 import com.stevezero.aws.api.apps.goaltender.resource.GoalTenderResourceType;
 import com.stevezero.aws.api.apps.goaltender.storage.items.impl.GoalItem;
 import com.stevezero.aws.api.exceptions.InvalidApiResource;
-import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
+import com.stevezero.aws.api.exceptions.InvalidApiResourceId;
 import com.stevezero.aws.api.id.ApiResourceId;
 import com.stevezero.aws.api.resource.ApiResource;
 import com.stevezero.aws.api.storage.items.MappedItem;
@@ -45,11 +46,11 @@ public class GoalResource implements ApiResource {
    *
    * @param jsonString the JSON representation of the resource.
    * @param userBase64String the JSON representation of the resource.
-   * @throws InvalidResourceIdException when the ID is corrupted and undecodable.
+   * @throws InvalidApiResourceId when the ID is corrupted and undecodable.
    * @throws InvalidApiResource if the JSON is malformed.
    */
   public GoalResource(String jsonString, String userBase64String)
-      throws InvalidResourceIdException, InvalidApiResource {
+      throws InvalidApiResourceId, InvalidApiResource {
     try {
       if (jsonString == null)
         throw new ParseException(0);
@@ -60,7 +61,7 @@ public class GoalResource implements ApiResource {
       if (goalId == null)
         throw new ParseException(0);
 
-      this.id = new GoalId(goalId, userBase64String);
+      this.id = new GoalId(goalId, new UserId(userBase64String));
       this.complete = (Boolean)json.get("complete");
 
       // Must have text and a create date.
@@ -99,12 +100,12 @@ public class GoalResource implements ApiResource {
   /**
    * Parse a backend UserItem into an ApiResource.
    * @param goalItem the GoalItem instance.
-   * @throws InvalidResourceIdException on error parsing the Item key.
+   * @throws InvalidApiResourceId on error parsing the Item key.
    */
-  public GoalResource(GoalItem goalItem) throws InvalidResourceIdException {
+  public GoalResource(GoalItem goalItem) throws InvalidApiResourceId {
     // Without an ID, invalid resource.
     // TODO: probably need a better exception for this error, its a storage error.
-    if (goalItem.getKey() == null) throw new InvalidResourceIdException("");
+    if (goalItem.getKey() == null) throw new InvalidApiResourceId("");
 
     this.id = new GoalId(goalItem.getKey());
     this.complete = goalItem.getComplete();

@@ -1,10 +1,7 @@
 package com.stevezero.aws.api.apps.goaltender.service;
 
 import com.stevezero.aws.api.apps.goaltender.resource.GoalTenderResourceType;
-import com.stevezero.aws.api.apps.goaltender.service.method.impl.GoalPutHandler;
-import com.stevezero.aws.api.apps.goaltender.service.method.impl.GoalsGetHandler;
-import com.stevezero.aws.api.apps.goaltender.service.method.impl.UserGetHandler;
-import com.stevezero.aws.api.apps.goaltender.service.method.impl.UserPutHandler;
+import com.stevezero.aws.api.apps.goaltender.service.method.impl.*;
 import com.stevezero.aws.api.exceptions.ApiException;
 import com.stevezero.aws.api.exceptions.InvalidApiMethod;
 import com.stevezero.aws.api.exceptions.InvalidApiResourceName;
@@ -43,10 +40,11 @@ public class GoalTenderProxyApiHandler extends ApiProxyHandler {
         // Instantiate handler for method on user resource.
         switch(methodType) {
           case GET:
-            return new GoalsGetHandler();
+            return new GoalGetHandler();
           case PUT:
             return new GoalPutHandler();
           case POST:
+            return new GoalPostHandler();
           default:
             throw new InvalidApiMethod(methodType, resourceType);
         }

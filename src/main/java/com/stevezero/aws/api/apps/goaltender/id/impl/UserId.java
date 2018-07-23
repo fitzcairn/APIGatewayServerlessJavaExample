@@ -1,6 +1,6 @@
 package com.stevezero.aws.api.apps.goaltender.id.impl;
 
-import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
+import com.stevezero.aws.api.exceptions.InvalidApiResourceId;
 import com.stevezero.aws.api.id.ApiResourceId;
 import com.stevezero.aws.api.id.IdentityType;
 import org.json.simple.JSONObject;
@@ -36,7 +36,7 @@ public class UserId implements ApiResourceId {
     i: "1234", // Token
   }
 */
-  public UserId(String base64IdString) throws InvalidResourceIdException {
+  public UserId(String base64IdString) throws InvalidApiResourceId {
     try {
       // Decode the string, propagating the exception if something went wrong.
       String jsonIdString = new String(DECODER.decode(base64IdString));
@@ -47,7 +47,7 @@ public class UserId implements ApiResourceId {
       this.id = (String)userIdJson.get(ID_KEY);
       this.idType = IdentityType.decode((String)userIdJson.get(TYPE_KEY));
     } catch (ParseException | IllegalArgumentException e) {
-      throw new InvalidResourceIdException(base64IdString);
+      throw new InvalidApiResourceId(base64IdString);
     }
   }
 

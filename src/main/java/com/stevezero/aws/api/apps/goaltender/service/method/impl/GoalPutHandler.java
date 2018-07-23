@@ -9,6 +9,7 @@ import com.stevezero.aws.api.apps.goaltender.service.method.GoalTenderApiMethodH
 import com.stevezero.aws.api.apps.goaltender.storage.service.impl.GoalStorageService;
 import com.stevezero.aws.api.exceptions.ApiException;
 import com.stevezero.aws.api.exceptions.InvalidApiResource;
+import com.stevezero.aws.api.exceptions.InvalidApiResourceUpdate;
 import com.stevezero.aws.api.http.StatusCode;
 import com.stevezero.aws.api.id.ApiResourceId;
 import com.stevezero.aws.api.service.ApiGatewayProxyRequest;
@@ -38,17 +39,23 @@ public class GoalPutHandler extends GoalTenderApiMethodHandler {
 
     // Pull out the ID.
     ApiResourceId userId = new UserId(parsedApiPath.getIdFor(GoalTenderResourceType.USER));
-    ApiResourceId goalId = new GoalId(parsedApiPath.getIdFor(GoalTenderResourceType.GOAL),
-        parsedApiPath.getIdFor(GoalTenderResourceType.USER));
+    ApiResourceId goalId = new GoalId(parsedApiPath.getIdFor(GoalTenderResourceType.GOAL), (UserId) userId);
 
     // Get the goal resource from the body.
     GoalResource resource = new GoalResource(request.getBody(), userId.toBase64String());
 
     // Check that the body goal ID matches the goal ID on the path.
-    if (!goalId.toBase64String().equals(((GoalId)resource.getResourceId()).getGoalIdString()))
+    if (!((GoalId)resource.getResourceId()).getGoalIdString().equals(
+        parsedApiPath.getIdFor(GoalTenderResourceType.GOAL)))
       throw new InvalidApiResource(GoalTenderResourceType.GOAL);
 
-    // Upsert new item and return it.
+    // Check to make sure we have a goal with that ID in storage.
+    // (Naive, non-atomic check.)
+    if (storageService.get(resource.getResourceId()) == null)
+      throw new InvalidApiResourceUpdate(GoalTenderResourceType.GOAL,
+          ((GoalId)resource.getResourceId()).getClientGoalId());
+
+    // Update new item and return it.
     storageService.update(resource.toItem());
 
     return responseBuilder

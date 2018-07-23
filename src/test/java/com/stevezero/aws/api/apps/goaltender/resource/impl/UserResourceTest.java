@@ -3,7 +3,7 @@ package com.stevezero.aws.api.apps.goaltender.resource.impl;
 import com.stevezero.aws.api.apps.goaltender.id.impl.UserId;
 import com.stevezero.aws.api.apps.goaltender.storage.items.impl.UserItem;
 import com.stevezero.aws.api.exceptions.InvalidApiResource;
-import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
+import com.stevezero.aws.api.exceptions.InvalidApiResourceId;
 import com.stevezero.aws.api.id.IdentityType;
 import org.junit.Test;
 
@@ -61,7 +61,7 @@ public class UserResourceTest {
   }
 
   @Test
-  public void testUserOfJsonStringFull() throws InvalidResourceIdException, InvalidApiResource {
+  public void testUserOfJsonStringFull() throws InvalidApiResourceId, InvalidApiResource {
     UserResource expectedResource = new UserResource(
         testUserId,
         true,
@@ -74,7 +74,7 @@ public class UserResourceTest {
   }
 
   @Test
-  public void testUserOfJsonStringPartial() throws InvalidResourceIdException, InvalidApiResource {
+  public void testUserOfJsonStringPartial() throws InvalidApiResourceId, InvalidApiResource {
     UserResource expectedResource = new UserResource(
         testUserId,
         true,
@@ -137,7 +137,7 @@ public class UserResourceTest {
   }
 
   @Test
-  public void testUserOfItemFull() throws InvalidResourceIdException {
+  public void testUserOfItemFull() throws InvalidApiResourceId {
     UserItem expectedItem = new UserItem();
     expectedItem.setKey(testIdString);
     expectedItem.setHasRemindersOn(true);
@@ -156,7 +156,7 @@ public class UserResourceTest {
   }
 
   @Test
-  public void testUserOfItemPartial() throws InvalidResourceIdException {
+  public void testUserOfItemPartial() throws InvalidApiResourceId {
     UserItem expectedItem = new UserItem();
     expectedItem.setKey(testIdString);
     expectedItem.setHasSeenFtux(true);

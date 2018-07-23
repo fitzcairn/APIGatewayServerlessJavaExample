@@ -1,18 +1,20 @@
 package com.stevezero.aws.api.apps.goaltender.resource.impl;
 
 import com.stevezero.aws.api.apps.goaltender.id.impl.GoalId;
+import com.stevezero.aws.api.apps.goaltender.id.impl.UserId;
 import com.stevezero.aws.api.apps.goaltender.storage.items.impl.GoalItem;
 import com.stevezero.aws.api.exceptions.InvalidApiResource;
-import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
+import com.stevezero.aws.api.exceptions.InvalidApiResourceId;
+import com.stevezero.aws.api.id.IdentityType;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class GoalResourceTest {
-  // {"t": "g","i": "1234"}
-  private final String userIdString = "eyJ0IjoiZyIsImkiOiIxMjM0In0=";
+  protected final UserId testUserId = new UserId("1234", IdentityType.GOOGLE);
+  private final String userIdString = testUserId.toBase64String();
   private final String goalIdString = "abcd";
-  private final GoalId testGoalId = new GoalId(goalIdString, userIdString);
+  private final GoalId testGoalId = new GoalId(goalIdString, testUserId);
 
 
   /**
@@ -74,7 +76,7 @@ public class GoalResourceTest {
   }
 
   @Test
-  public void testUserOfJsonStringFull() throws InvalidResourceIdException, InvalidApiResource {
+  public void testUserOfJsonStringFull() throws InvalidApiResourceId, InvalidApiResource {
     GoalResource expectedResource = new GoalResource(
         testGoalId,
         "Goal Text",
@@ -85,7 +87,7 @@ public class GoalResourceTest {
     assertEquals(expectedResource.toJsonString(), testResource.toJsonString());
   }
 
-  public void testUserOfJsonStringNotComplete() throws InvalidResourceIdException, InvalidApiResource {
+  public void testUserOfJsonStringNotComplete() throws InvalidApiResourceId, InvalidApiResource {
     GoalResource expectedResource = new GoalResource(
         testGoalId,
         "Goal Text",
@@ -144,7 +146,7 @@ public class GoalResourceTest {
 
 
   @Test
-  public void testOfItemFull() throws InvalidResourceIdException {
+  public void testOfItemFull() throws InvalidApiResourceId {
     GoalItem expectedItem = new GoalItem();
     expectedItem.setKey(testGoalId.toBase64String());
     expectedItem.setGoalText("Goal Text");
@@ -160,7 +162,7 @@ public class GoalResourceTest {
     assertEquals(expectedItem.getComplete(), resultItem.getComplete());
   }
 
-  public void testOfItemNotComplete() throws InvalidResourceIdException {
+  public void testOfItemNotComplete() throws InvalidApiResourceId {
     GoalItem expectedItem = new GoalItem();
     expectedItem.setKey(testGoalId.toBase64String());
     expectedItem.setGoalText("Goal Text");

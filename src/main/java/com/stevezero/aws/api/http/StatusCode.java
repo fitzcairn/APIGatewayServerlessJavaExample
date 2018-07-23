@@ -1,10 +1,11 @@
 package com.stevezero.aws.api.http;
 
 public enum StatusCode {
-  OK(200, "Ok"),
+  OK(200, "OK"),
   BAD_REQUEST(400, "Bad request"),
   NOT_FOUND(404, "Not found"),
-  NOT_ALLOWED(405, "MethodType not allowed."),
+  NOT_ALLOWED(405, "Method not allowed"),
+  CONFLICT(405, "Conflict"),
   SERVER_ERROR(500, "Unknown Server Error");
 
   private final int code;
