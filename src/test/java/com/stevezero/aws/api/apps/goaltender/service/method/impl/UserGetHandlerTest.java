@@ -13,12 +13,12 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests for the public class GetUserHandler class.
+ * Tests for the public class UserGetHandler class.
  */
-public class GetUserHandlerTest {
+public class UserGetHandlerTest {
   // {"t": "g","i": "1234"}
   private final String testIdString = "eyJ0IjoiZyIsImkiOiIxMjM0In0=";
-  private final GetUserHandler requestHandler = new GetUserHandler();
+  private final UserGetHandler requestHandler = new UserGetHandler();
 
   @Test
   public void testHandleRequest() throws ApiException {

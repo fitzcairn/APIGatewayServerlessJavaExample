@@ -1,4 +1,4 @@
-package com.stevezero.aws.api.apps.goaltender.storage.service;
+package com.stevezero.aws.api.apps.goaltender.storage.service.impl;
 
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
@@ -7,9 +7,9 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.stevezero.aws.api.storage.service.StorageService;
 
 /**
- * Take care of setup for Dynamo-backed storage.
+ * Implementation of Dynamo-backed storage.
  */
-public abstract class DynamoStorageService implements StorageService {
+public class DynamoStorageService implements StorageService {
   protected final DynamoDBMapper dynamoDbMapper;
 
   public DynamoStorageService() {
@@ -19,4 +19,6 @@ public abstract class DynamoStorageService implements StorageService {
         .build();
     this.dynamoDbMapper = new DynamoDBMapper(client);
   }
+
+
 }
