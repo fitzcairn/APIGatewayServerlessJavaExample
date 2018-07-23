@@ -1,7 +1,7 @@
 package com.stevezero.aws.api.apps.goaltender.resource.impl;
 
 import com.stevezero.aws.api.apps.goaltender.id.impl.GoalId;
-import com.stevezero.aws.api.apps.goaltender.resource.ResourceType;
+import com.stevezero.aws.api.apps.goaltender.resource.GoalTenderResourceType;
 import com.stevezero.aws.api.apps.goaltender.storage.items.impl.GoalItem;
 import com.stevezero.aws.api.exceptions.InvalidApiResource;
 import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
@@ -72,7 +72,7 @@ public class GoalResource implements ApiResource {
         throw new ParseException(0);
 
     } catch (ParseException e) {
-      throw new InvalidApiResource(ResourceType.GOAL);
+      throw new InvalidApiResource(GoalTenderResourceType.GOAL);
     }
   }
 

@@ -1,7 +1,7 @@
 package com.stevezero.aws.api.apps.goaltender.resource.impl;
 
 import com.stevezero.aws.api.apps.goaltender.id.impl.UserId;
-import com.stevezero.aws.api.apps.goaltender.resource.ResourceType;
+import com.stevezero.aws.api.apps.goaltender.resource.GoalTenderResourceType;
 import com.stevezero.aws.api.apps.goaltender.storage.items.impl.UserItem;
 import com.stevezero.aws.api.exceptions.InvalidApiResource;
 import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
@@ -105,7 +105,7 @@ public class UserResource implements ApiResource {
       this.reminderTimeString = (String)json.get("reminderTimeString");
 
     } catch (ParseException e) {
-      throw new InvalidApiResource(ResourceType.USER);
+      throw new InvalidApiResource(GoalTenderResourceType.USER);
     }
   }
 

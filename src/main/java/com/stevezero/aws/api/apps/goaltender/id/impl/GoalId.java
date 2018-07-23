@@ -2,11 +2,8 @@ package com.stevezero.aws.api.apps.goaltender.id.impl;
 
 import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
 import com.stevezero.aws.api.id.ApiResourceId;
-import com.stevezero.aws.api.id.IdentityType;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-
-import java.util.Base64;
 
 /**
  * Pojo for a GoalId.  To enforce uniqueness, concat'd with the user id before encoding.

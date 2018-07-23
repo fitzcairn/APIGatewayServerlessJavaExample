@@ -5,12 +5,11 @@ import com.stevezero.aws.api.exceptions.ApiException;
 import com.stevezero.aws.api.http.MethodType;
 import com.stevezero.aws.api.http.StatusCode;
 import com.stevezero.aws.api.mocks.MockContext;
-import com.stevezero.aws.api.mocks.MockStorageService;
 import com.stevezero.aws.api.service.ApiGatewayProxyRequest;
 import com.stevezero.aws.api.service.ApiGatewayProxyResponse;
-import com.stevezero.aws.api.service.ApiMethodHandler;
+import com.stevezero.aws.api.service.ApiPath;
 import com.stevezero.aws.api.service.ApiProxyHandler;
-import com.stevezero.aws.api.storage.service.StorageService;
+import com.stevezero.aws.api.service.method.ApiMethodHandler;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -19,11 +18,17 @@ import static org.junit.Assert.assertEquals;
  * Tests for the ApiProxyHandler class.
  */
 public class ApiProxyHandlerTest {
+  private enum TestResource {
+    APPLE,
+    LEMON,
+    PEAR,
+  }
+
   private class TestMethodHandler implements ApiMethodHandler {
     @Override
     public ApiGatewayProxyResponse handleRequest(ApiGatewayProxyRequest request,
-                                                 Context context,
-                                                 StorageService storageService) throws ApiException {
+                                                 ApiPath parsedApiPath,
+                                                 Context context) throws ApiException {
       return new ApiGatewayProxyResponse.Builder()
           .withBody(request.getBody())
           .withStatusCode(StatusCode.OK)
@@ -32,28 +37,28 @@ public class ApiProxyHandlerTest {
   }
 
   private class TestProxyHandler extends ApiProxyHandler {
-    protected TestProxyHandler(StorageService storageService) {
-      super(storageService);
+    TestProxyHandler() {
+      super(TestResource.class);
     }
 
     @Override
-    protected void createHandlers() {
-      methodHandlers.put(MethodType.GET, new TestMethodHandler());
+    protected ApiMethodHandler getMethodHandler(MethodType methodType, ApiPath parsedApiPath)
+        throws ApiException {
+      return new TestMethodHandler();
     }
   }
 
   @Test
-  public void testHandleRequestHasMethod() {
+  public void testHandleRequestValid() {
     MockContext context = new MockContext();
-    MockStorageService storageService = new MockStorageService();
-
-    ApiProxyHandler testHandler = new TestProxyHandler(storageService);
+    ApiProxyHandler testHandler = new TestProxyHandler();
 
     ApiGatewayProxyRequest testRequest = new ApiGatewayProxyRequest();
     testRequest.setBody("OK");
     testRequest.setHttpMethod(MethodType.GET.toString());
+    testRequest.setPath("/apple/1234");
 
-    // Invoke the handler for a GET call.
+    // Invoke the handler
     ApiGatewayProxyResponse testResponse = testHandler.handleRequest(testRequest, context);
 
     // Should succeed, and return the request body in the response.
@@ -61,22 +66,21 @@ public class ApiProxyHandlerTest {
     assertEquals(testRequest.getBody(), testResponse.getBody());
  }
 
+
   @Test
-  public void testHandleRequestNoMethod() {
+  public void testHandleRequestBadResource() {
     MockContext context = new MockContext();
-    MockStorageService storageService = new MockStorageService();
+    ApiProxyHandler testHandler = new TestProxyHandler();
 
-    ApiProxyHandler testHandler = new TestProxyHandler(storageService);
-
-    // Build a request for a PUT call, which there is no handler for.
     ApiGatewayProxyRequest testRequest = new ApiGatewayProxyRequest();
-    testRequest.setHttpMethod(MethodType.PUT.toString());
+    testRequest.setBody("FAIL");
+    testRequest.setHttpMethod(MethodType.GET.toString());
+    testRequest.setPath("/test/"); // <-- Not a valid resource.
 
-    // Invoke the handler for a PUT call.
+    // Invoke the handler
     ApiGatewayProxyResponse testResponse = testHandler.handleRequest(testRequest, context);
 
-    // Should fail with a NOT_ALLOWED
-    assertEquals(StatusCode.NOT_ALLOWED.getCode(), testResponse.getStatusCode());
+    // Should return 400 bad request.
+    assertEquals(StatusCode.BAD_REQUEST.getCode(), testResponse.getStatusCode());
   }
-
 }

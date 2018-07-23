@@ -4,31 +4,27 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.stevezero.aws.api.exceptions.ApiException;
-import com.stevezero.aws.api.exceptions.InvalidApiMethod;
 import com.stevezero.aws.api.http.MethodType;
 import com.stevezero.aws.api.http.StatusCode;
-import com.stevezero.aws.api.storage.service.StorageService;
-
-import java.util.EnumMap;
-import java.util.Map;
+import com.stevezero.aws.api.service.method.ApiMethodHandler;
 
 /**
  * Generic AWS API Gateway proxy API handler for lambdas.  Subclass this and add method-specific handlers to implement
  * a proxy API.
  */
-public abstract class ApiProxyHandler implements RequestHandler<ApiGatewayProxyRequest, ApiGatewayProxyResponse> {
-  protected final StorageService storageService;
-  protected final Map<MethodType, ApiMethodHandler> methodHandlers = new EnumMap<MethodType, ApiMethodHandler>(MethodType.class);
+public abstract class ApiProxyHandler <T extends Enum>
+    implements RequestHandler<ApiGatewayProxyRequest, ApiGatewayProxyResponse> {
+  private final Class<T> resourceTypesClass;
 
-  protected ApiProxyHandler(StorageService storageService) {
-    this.storageService = storageService;
-    this.createHandlers();
+  protected ApiProxyHandler(Class<T> resourceTypesClass) {
+    this.resourceTypesClass = resourceTypesClass;
   }
 
   /**
-   * Assign specific handlers for HTTP methods.
+   * Get the handler for a particular call, lazily constructed.
    */
-  protected abstract void createHandlers();
+  protected abstract ApiMethodHandler getMethodHandler(MethodType methodType, ApiPath<T> parsedApiPath)
+    throws ApiException;
 
   /**
    * Handle the request for a proxy API.
@@ -41,13 +37,15 @@ public abstract class ApiProxyHandler implements RequestHandler<ApiGatewayProxyR
     LambdaLogger logger = context.getLogger();
 
     try {
-      // Do we have this method implemented on this resource?
-      ApiMethodHandler handler = methodHandlers.get(MethodType.valueOf(request.getHttpMethod()));
-      if (handler == null)
-        throw new InvalidApiMethod(request.getHttpMethod());
+      // Parse the path.
+      ApiPath<T> parsedApiPath = ApiPath.of(request.getPath(), this.resourceTypesClass);
+
+      // Do we have handlers for the last resource?
+      ApiMethodHandler handler = getMethodHandler(MethodType.valueOf(request.getHttpMethod()), parsedApiPath);
 
       // Invoke the method handler
-      return handler.handleRequest(request, context, storageService);
+      return handler.handleRequest(request, parsedApiPath, context);
+
     } catch(ApiException e) { // Catch API exceptions.
       return responseBuilder
           .withStatusCode(e.getReturnCode())

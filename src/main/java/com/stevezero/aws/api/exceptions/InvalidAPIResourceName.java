@@ -7,8 +7,8 @@ import com.stevezero.aws.api.http.StatusCode;
  * Checked exception by design.
  */
 public class InvalidApiResourceName extends ApiException {
-  public InvalidApiResourceName(String path) {
-    this.message = path + " is not a valid API call.";
+  public InvalidApiResourceName(String resource) {
+    this.message = resource + " is not a valid API resource.";
     this.returnCode = StatusCode.NOT_FOUND;
   }
 }

@@ -1,9 +1,7 @@
 package com.stevezero.aws.api.apps.goaltender.service.method.impl;
 
-import com.stevezero.aws.api.service.ApiGatewayProxyRequest;
-import com.stevezero.aws.api.service.ApiGatewayProxyResponse;
 import com.stevezero.aws.api.apps.goaltender.id.impl.UserId;
-import com.stevezero.aws.api.mocks.MockContext;
+import com.stevezero.aws.api.apps.goaltender.resource.GoalTenderResourceType;
 import com.stevezero.aws.api.apps.goaltender.resource.impl.UserResource;
 import com.stevezero.aws.api.apps.goaltender.storage.items.impl.UserItem;
 import com.stevezero.aws.api.exceptions.ApiException;
@@ -11,7 +9,12 @@ import com.stevezero.aws.api.exceptions.InvalidApiResource;
 import com.stevezero.aws.api.http.MethodType;
 import com.stevezero.aws.api.http.StatusCode;
 import com.stevezero.aws.api.id.IdentityType;
+import com.stevezero.aws.api.mocks.MockContext;
 import com.stevezero.aws.api.mocks.MockStorageService;
+import com.stevezero.aws.api.service.ApiGatewayProxyRequest;
+import com.stevezero.aws.api.service.ApiGatewayProxyResponse;
+import com.stevezero.aws.api.service.ApiPath;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -20,35 +23,48 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests for the UserPutHandler class.
  */
-public class PutUserHandlerTest {
+public class UserPutHandlerTest {
   // {"t": "g","i": "1234"}
-  private final String testIdString = "eyJ0IjoiZyIsImkiOiIxMjM0In0=";
+  private final UserId testUserId = new UserId("1234", IdentityType.GOOGLE);
+  private final String testIdString = testUserId.toBase64String();
   private final UserResource testResource = new UserResource(
-      new UserId("1234", IdentityType.GOOGLE),
+      testUserId,
       true,
       true,
       "2018-07-22T02:33:57+00:00",
       "2:33:57+00:00");
 
-  private final UserPutHandler requestHandler = new UserPutHandler();
+  private final MockStorageService storageService = new MockStorageService();
+  private final UserPutHandler requestHandler = new UserPutHandler(storageService);
+  private ApiGatewayProxyRequest testRequest;
 
-  /*
+  @Before
+  public void reset() {
+    storageService.reset();
+    testRequest = new ApiGatewayProxyRequest()
+        .setHttpMethod("PUT")
+        .setBase64Encoded(false);
+  }
+
+  private ApiGatewayProxyResponse getOutput(ApiPath apiPath, UserResource testResource) throws ApiException {
+    MockContext context = new MockContext();
+
+    // Set the path and the body.
+    testRequest.setPath(apiPath.getPath());
+    testRequest.setBody(testResource.toJsonString());
+
+    return requestHandler.handleRequest(testRequest, apiPath, context);
+  }
+
+
   @Test
   public void testHandleRequestCreateNew() throws ApiException {
-    MockContext context = new MockContext();
-    MockStorageService storageService = new MockStorageService();
+    ApiPath apiPath = ApiPath.of("/user/" + testIdString, GoalTenderResourceType.class);
 
     // Storage is empty.
 
     // PUT a resource.
-    ApiGatewayProxyRequest request = new ApiGatewayProxyRequest()
-        .setPath("/user/" + testIdString)
-        .setHttpMethod(MethodType.PUT.toString())
-        .setBody(testResource.toJsonString())
-        .setBase64Encoded(false);
-
-    ApiGatewayProxyResponse output = requestHandler.handleRequest(request, context, storageService);
-    assertEquals(StatusCode.OK.getCode(), output.getStatusCode());
+    assertEquals(StatusCode.OK.getCode(), getOutput(apiPath, testResource).getStatusCode());
 
     // Storage should now have the item in it.
     UserItem resultItem = (UserItem)storageService.getMap().get(testIdString);
@@ -57,8 +73,7 @@ public class PutUserHandlerTest {
 
   @Test
   public void testHandleRequestUpdate() throws ApiException {
-    MockContext context = new MockContext();
-    MockStorageService storageService = new MockStorageService();
+    ApiPath apiPath = ApiPath.of("/user/" + testIdString, GoalTenderResourceType.class);
 
     // Storage has an item in it.
     storageService.add(testIdString, testResource.toItem());
@@ -71,14 +86,7 @@ public class PutUserHandlerTest {
     UserResource expectedResource = new UserResource(expectedItem);
 
     // PUT the new resource.
-    ApiGatewayProxyRequest request = new ApiGatewayProxyRequest()
-        .setPath("/user/" + testIdString)
-        .setHttpMethod(MethodType.PUT.toString())
-        .setBody(expectedResource.toJsonString())
-        .setBase64Encoded(false);
-
-    ApiGatewayProxyResponse output = requestHandler.handleRequest(request, context, storageService);
-    assertEquals(StatusCode.OK.getCode(), output.getStatusCode());
+    assertEquals(StatusCode.OK.getCode(), getOutput(apiPath, expectedResource).getStatusCode());
 
     // Storage should now have the updates in it.
     UserItem resultItem = (UserItem)storageService.getMap().get(testIdString);
@@ -87,42 +95,34 @@ public class PutUserHandlerTest {
 
   @Test(expected = InvalidApiResource.class)
   public void testHandleResourcePathIdMismatch() throws ApiException {
-    MockContext context = new MockContext();
-    MockStorageService storageService = new MockStorageService();
+    ApiPath apiPath = ApiPath.of("/user/" + testIdString, GoalTenderResourceType.class);
 
-    UserId testId = new UserId("1234", IdentityType.GOOGLE);
+    // Create a new resource with a different ID than the ID on the path.
     UserResource testResource = new UserResource(
-        new UserId("5678", IdentityType.FACEBOOK), // <-- Does not match testId.
+        new UserId("5678", IdentityType.FACEBOOK), // <-- Does not match this.testUserId.
         true,
         true,
         "2018-07-22T02:33:57+00:00",
         "2:33:57+00:00");
 
     // Attempt the PUT.  This should blow up with a InvalidApiResource exception.
-    ApiGatewayProxyRequest request = new ApiGatewayProxyRequest()
-        .setPath("/user/" + testId.toBase64String())
-        .setHttpMethod(MethodType.PUT.toString())
-        .setBody(testResource.toJsonString())
-        .setBase64Encoded(false);
-
-    ApiGatewayProxyResponse output = requestHandler.handleRequest(request, context, storageService);
+    getOutput(apiPath, testResource);
     assert false; // Should never reach here.
   }
 
   @Test(expected = InvalidApiResource.class)
   public void testHandleResourcePathNoBody() throws ApiException {
-    MockContext context = new MockContext();
-    MockStorageService storageService = new MockStorageService();
+    ApiPath apiPath = ApiPath.of("/user/" + testIdString, GoalTenderResourceType.class);
 
-    UserId testId = new UserId("1234", IdentityType.GOOGLE);
-
-    // Attempt the PUT.  This should blow up with a InvalidApiResource exception.
+    // Create a PUT request with no body.
     ApiGatewayProxyRequest request = new ApiGatewayProxyRequest()
-        .setPath("/user/" + testId.toBase64String())
+        .setPath(apiPath.getPath())
         .setHttpMethod(MethodType.PUT.toString())
         .setBase64Encoded(false);
+        // Missing: body!
 
-    ApiGatewayProxyResponse output = requestHandler.handleRequest(request, context, storageService);
+    // Attempt the PUT.  This should blow up with a InvalidApiResource exception.
+    requestHandler.handleRequest(request, apiPath, new MockContext());
     assert false; // Should never reach here.
-  }*/
+  }
 }

@@ -1,8 +1,10 @@
-package com.stevezero.aws.api.service;
+package com.stevezero.aws.api.service.method;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.stevezero.aws.api.exceptions.ApiException;
-import com.stevezero.aws.api.storage.service.StorageService;
+import com.stevezero.aws.api.service.ApiGatewayProxyRequest;
+import com.stevezero.aws.api.service.ApiGatewayProxyResponse;
+import com.stevezero.aws.api.service.ApiPath;
 
 /**
  * Defines an API method handler.
@@ -12,12 +14,12 @@ public interface ApiMethodHandler {
   /**
    * Handles a method call on the API.
    * @param request the API request.
+   * @param parsedApiPath the parsed API path with resource IDs.
    * @param context the lambda execution context.
-   * @param storageService the underlying storage service.
    * @return
    */
    public ApiGatewayProxyResponse handleRequest(ApiGatewayProxyRequest request,
-                                                Context context,
-                                                StorageService storageService) throws ApiException;
+                                                ApiPath parsedApiPath,
+                                                Context context) throws ApiException;
 
 }

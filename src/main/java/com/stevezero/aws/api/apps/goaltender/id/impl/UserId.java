@@ -4,10 +4,7 @@ import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
 import com.stevezero.aws.api.id.ApiResourceId;
 import com.stevezero.aws.api.id.IdentityType;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import java.util.Base64;
 
 /**
  * UserId pojo, with translation methods.

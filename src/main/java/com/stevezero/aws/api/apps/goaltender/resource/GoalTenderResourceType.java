@@ -1,6 +1,6 @@
 package com.stevezero.aws.api.apps.goaltender.resource;
 
-public enum ResourceType {
+public enum GoalTenderResourceType {
   USER,
   GOAL;
 

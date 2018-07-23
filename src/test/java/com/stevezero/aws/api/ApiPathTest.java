@@ -1,44 +1,53 @@
-package com.stevezero.aws.api.apps.goaltender.id;
+package com.stevezero.aws.api;
 
-import com.stevezero.aws.api.apps.goaltender.id.impl.UserId;
-import com.stevezero.aws.api.apps.goaltender.resource.GoalTenderResourceType;
-import com.stevezero.aws.api.exceptions.InvalidApiResourceName;
-import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
-import com.stevezero.aws.api.id.ApiResourceId;
-import com.stevezero.aws.api.id.IdentityType;
+import com.stevezero.aws.api.exceptions.InvalidApiInvocation;
+import com.stevezero.aws.api.service.ApiPath;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
-/**
- * Tests for PathIdExtractor methods.
- */
-public class PathIdExtractorTest {
-  // {"t": "g","i": "1234"}
-  private final String testIdString = "eyJ0IjogImciLCJpIjogIjEyMzQifQ==";
+public class ApiPathTest {
+
+  private enum TestResource {
+    APPLE,
+    PEAR,
+    PLUM,
+  }
 
   @Test
-  public void testPathOk() throws InvalidApiResourceName, InvalidResourceIdException {
-    ApiResourceId result = PathIdExtractor.extractIdFromPath(
-        "/" + GoalTenderResourceType.USER.toString() + "/" + testIdString,
-         GoalTenderResourceType.USER);
+  public void testPathSingleOk() throws InvalidApiInvocation {
+    ApiPath testPath = ApiPath.of("/apple/1234", TestResource.class);
 
-    UserId id = new UserId(result.toBase64String());
-    assertEquals("1234", id.getId());
-    assertEquals(IdentityType.GOOGLE, id.getType());
+    assertEquals(TestResource.APPLE, testPath.getLastResource());
+    assertEquals("1234", testPath.getIdFor(TestResource.APPLE));
+    assertNull(testPath.getIdFor(TestResource.PEAR));
   }
 
-  @Test(expected = InvalidApiResourceName.class)
-  public void testPathInvalidResource() throws InvalidApiResourceName, InvalidResourceIdException {
-    ApiResourceId result = PathIdExtractor.extractIdFromPath(
-        "/notauser/" + testIdString,
-        GoalTenderResourceType.USER);
+  @Test
+  public void testPathMultipleOk() throws InvalidApiInvocation {
+    ApiPath testPath = ApiPath.of("/apple/1234/pear/5678", TestResource.class);
+
+    assertEquals(TestResource.PEAR, testPath.getLastResource());
+    assertEquals("1234", testPath.getIdFor(TestResource.APPLE));
+    assertEquals("5678", testPath.getIdFor(TestResource.PEAR));
+    assertNull(testPath.getIdFor(TestResource.PLUM));
   }
 
-  @Test(expected = InvalidApiResourceName.class)
-  public void testPathInvalidPath() throws InvalidApiResourceName, InvalidResourceIdException {
-    ApiResourceId result = PathIdExtractor.extractIdFromPath(
-        "/prod/user/" + testIdString,
-        GoalTenderResourceType.USER);
+  @Test
+  public void testPathNoIdOk() throws InvalidApiInvocation {
+    ApiPath testPath = ApiPath.of("/apple", TestResource.class);
+    assertNull(testPath.getIdFor(TestResource.APPLE));
+  }
+
+  @Test
+  public void testPathNoIdTrailingSlashOk() throws InvalidApiInvocation {
+    ApiPath testPath = ApiPath.of("/apple/", TestResource.class);
+    assertNull(testPath.getIdFor(TestResource.APPLE));
+  }
+
+  @Test(expected = InvalidApiInvocation.class)
+  public void testPathInvalidNoResource() throws InvalidApiInvocation {
+    ApiPath.of("/", TestResource.class);
   }
 }
