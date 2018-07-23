@@ -6,7 +6,10 @@ import com.stevezero.aws.api.http.MethodType;
 import com.stevezero.aws.api.http.StatusCode;
 import com.stevezero.aws.api.mocks.MockContext;
 import com.stevezero.aws.api.mocks.MockStorageService;
+import com.stevezero.aws.api.service.ApiGatewayProxyRequest;
+import com.stevezero.aws.api.service.ApiGatewayProxyResponse;
 import com.stevezero.aws.api.service.ApiMethodHandler;
+import com.stevezero.aws.api.service.ApiProxyHandler;
 import com.stevezero.aws.api.storage.service.StorageService;
 import org.junit.Test;
 

@@ -1,17 +1,19 @@
-package com.stevezero.aws.api.service.resource;
+package com.stevezero.aws.api.resource;
 
-import com.stevezero.aws.api.id.ResourceId;
+import com.stevezero.aws.api.id.ApiResourceId;
 import com.stevezero.aws.api.storage.items.MappedItem;
+import org.json.simple.parser.JSONParser;
 
 /**
  * A resource in the API.  Acts as a translation layer between frontend clients and the backend storage.
  */
 public interface ApiResource {
+  JSONParser JSON_PARSER = new JSONParser();
 
   /**
    * @return the id for this resource.
    */
-  public ResourceId getId();
+  public ApiResourceId getResourceId();
 
   /**
    * @return a JSON representation of this resource.

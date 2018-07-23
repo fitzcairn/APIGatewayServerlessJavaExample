@@ -1,22 +1,21 @@
-package com.stevezero.aws.api.apps.goaltender.service.goal.handlers;
+package com.stevezero.aws.api.apps.goaltender.service.impl;
 
 import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import com.stevezero.aws.api.ApiGatewayProxyRequest;
-import com.stevezero.aws.api.ApiGatewayProxyResponse;
-import com.stevezero.aws.api.apps.goaltender.id.IdExtractor;
+import com.stevezero.aws.api.service.ApiGatewayProxyRequest;
+import com.stevezero.aws.api.service.ApiGatewayProxyResponse;
+import com.stevezero.aws.api.apps.goaltender.id.PathIdExtractor;
+import com.stevezero.aws.api.apps.goaltender.id.impl.GoalId;
 import com.stevezero.aws.api.apps.goaltender.resource.ResourceType;
 import com.stevezero.aws.api.apps.goaltender.resource.impl.GoalResource;
-import com.stevezero.aws.api.apps.goaltender.storage.items.impl.GoalItem;
 import com.stevezero.aws.api.exceptions.ApiException;
 import com.stevezero.aws.api.exceptions.InvalidApiResource;
 import com.stevezero.aws.api.http.StatusCode;
-import com.stevezero.aws.api.id.ResourceId;
+import com.stevezero.aws.api.id.ApiResourceId;
 import com.stevezero.aws.api.service.ApiMethodHandler;
 import com.stevezero.aws.api.storage.service.StorageService;
 
 /**
- * Handler for PUT /goal/{ID}
+ * Handler for PUT user/ID/goal/{ID}
  * Update goal with JSON payload data.
  */
 public class PutGoalHandler implements ApiMethodHandler {
@@ -26,19 +25,17 @@ public class PutGoalHandler implements ApiMethodHandler {
                                                Context context,
                                                StorageService storageService) throws ApiException {
     ApiGatewayProxyResponse.Builder responseBuilder = new ApiGatewayProxyResponse.Builder();
-    LambdaLogger logger = context.getLogger();
-
-    logger.log("Executing PutGoalHandler");
 
     // Pull out the ID.
-    ResourceId id = IdExtractor.extractIdFromPath(request.getPath(), ResourceType.USER);
+    ApiResourceId userId = PathIdExtractor.extractIdFromPath(request.getPath(), ResourceType.USER);
+    ApiResourceId goalId = PathIdExtractor.extractIdFromPath(request.getPath(), ResourceType.GOAL);
 
     // Get the goal resource from the body.
-    GoalResource resource = GoalResource.of(request.getBody());
+    GoalResource resource = new GoalResource(request.getBody(), userId.toBase64String());
 
-    // Check that the body ID matches the path ID.
-    if (!id.toEncoded().equals(resource.getId().toEncoded()))
-      throw new InvalidApiResource(ResourceType.USER);
+    // Check that the body goal ID matches the goal ID on the path.
+    if (!goalId.toBase64String().equals(((GoalId)resource.getResourceId()).getGoalIdString()))
+      throw new InvalidApiResource(ResourceType.GOAL);
 
     // Upsert new item and return it.
     storageService.update(resource.toItem());

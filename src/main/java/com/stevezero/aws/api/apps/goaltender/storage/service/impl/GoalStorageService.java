@@ -3,7 +3,7 @@ package com.stevezero.aws.api.apps.goaltender.storage.service.impl;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.stevezero.aws.api.apps.goaltender.storage.items.impl.UserItem;
 import com.stevezero.aws.api.apps.goaltender.storage.service.DynamoStorageService;
-import com.stevezero.aws.api.id.ResourceId;
+import com.stevezero.aws.api.id.ApiResourceId;
 import com.stevezero.aws.api.storage.items.MappedItem;
 
 
@@ -20,7 +20,7 @@ public class GoalStorageService extends DynamoStorageService {
   public void update(MappedItem item) {
     UserItem userItem = (UserItem)item;
     dynamoDbMapper.save(userItem,
-        new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
+        DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES.config());
   }
 
   /**
@@ -29,8 +29,8 @@ public class GoalStorageService extends DynamoStorageService {
    * @return the UserItem object, or null if not found.
    */
   @Override
-  public MappedItem get(ResourceId id) {
-    return dynamoDbMapper.load(UserItem.class, id.toEncoded(),
-        new DynamoDBMapperConfig(DynamoDBMapperConfig.ConsistentReads.CONSISTENT));
+  public MappedItem get(ApiResourceId id) {
+    return dynamoDbMapper.load(UserItem.class, id.toBase64String(),
+        DynamoDBMapperConfig.ConsistentReads.CONSISTENT.config());
   }
 }

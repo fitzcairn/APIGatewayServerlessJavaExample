@@ -4,13 +4,19 @@ import com.stevezero.aws.api.apps.goaltender.id.impl.UserId;
 import com.stevezero.aws.api.apps.goaltender.resource.ResourceType;
 import com.stevezero.aws.api.exceptions.InvalidApiResourceName;
 import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
-import com.stevezero.aws.api.id.ResourceId;
+import com.stevezero.aws.api.id.IdentityType;
+import com.stevezero.aws.api.id.ApiResourceId;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.util.Base64;
 
 /**
- * Utility functions for working with paths containing IDs.
+ * Factory class for ResourceIds.
  */
-public class IdExtractor {
-  private IdExtractor() {}
+public class PathIdExtractor {
+  private PathIdExtractor() {}
 
   /**
    * Extract the resource ID from the path.
@@ -19,7 +25,7 @@ public class IdExtractor {
    * @throws InvalidApiResourceName
    * @throws InvalidResourceIdException
    */
-  public static ResourceId extractIdFromPath(String pathString, ResourceType resourceType)
+  public static ApiResourceId extractIdFromPath(String pathString, ResourceType resourceType)
       throws InvalidApiResourceName, InvalidResourceIdException {
     // Ex: /user/ID
     String[] components = pathString.split("/");
@@ -30,7 +36,7 @@ public class IdExtractor {
 
     switch(resourceType) {
       case USER:
-        return UserId.fromEncoded(components[2]);
+        return new UserId(components[2]);
       case GOAL:
         // TODO: implement.
       default:

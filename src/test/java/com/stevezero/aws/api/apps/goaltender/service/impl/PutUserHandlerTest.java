@@ -1,9 +1,9 @@
-package com.stevezero.aws.api.apps.goaltender.service.goal.handlers;
+package com.stevezero.aws.api.apps.goaltender.service.impl;
 
-import com.stevezero.aws.api.ApiGatewayProxyRequest;
-import com.stevezero.aws.api.ApiGatewayProxyResponse;
-import com.stevezero.aws.api.mocks.MockContext;
+import com.stevezero.aws.api.service.ApiGatewayProxyRequest;
+import com.stevezero.aws.api.service.ApiGatewayProxyResponse;
 import com.stevezero.aws.api.apps.goaltender.id.impl.UserId;
+import com.stevezero.aws.api.mocks.MockContext;
 import com.stevezero.aws.api.apps.goaltender.resource.impl.UserResource;
 import com.stevezero.aws.api.apps.goaltender.storage.items.impl.UserItem;
 import com.stevezero.aws.api.exceptions.ApiException;
@@ -18,9 +18,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for the PutGoalHandler class.
+ * Tests for the PutUserHandler class.
  */
-public class PutGoalHandlerTest {
+public class PutUserHandlerTest {
   // {"t": "g","i": "1234"}
   private final String testIdString = "eyJ0IjoiZyIsImkiOiIxMjM0In0=";
   private final UserResource testResource = new UserResource(
@@ -30,7 +30,7 @@ public class PutGoalHandlerTest {
       "2018-07-22T02:33:57+00:00",
       "2:33:57+00:00");
 
-  private final PutGoalHandler requestHandler = new PutGoalHandler();
+  private final PutUserHandler requestHandler = new PutUserHandler();
 
   @Test
   public void testHandleRequestCreateNew() throws ApiException {
@@ -51,7 +51,7 @@ public class PutGoalHandlerTest {
 
     // Storage should now have the item in it.
     UserItem resultItem = (UserItem)storageService.getMap().get(testIdString);
-    assertTrue(UserResource.of(resultItem).toJsonString().equals(testResource.toJsonString()));
+    assertTrue(new UserResource(resultItem).toJsonString().equals(testResource.toJsonString()));
   }
 
   @Test
@@ -67,7 +67,7 @@ public class PutGoalHandlerTest {
     expectedItem.setReminderTimeString("UPDATED!");
     expectedItem.setLastUpdateDateTimeString("UPDATED!");
     expectedItem.setHasSeenFtux(false);
-    UserResource expectedResource = UserResource.of(expectedItem);
+    UserResource expectedResource = new UserResource(expectedItem);
 
     // PUT the new resource.
     ApiGatewayProxyRequest request = new ApiGatewayProxyRequest()
@@ -81,7 +81,7 @@ public class PutGoalHandlerTest {
 
     // Storage should now have the updates in it.
     UserItem resultItem = (UserItem)storageService.getMap().get(testIdString);
-    assertTrue(UserResource.of(resultItem).toJsonString().equals(expectedResource.toJsonString()));
+    assertTrue(new UserResource(resultItem).toJsonString().equals(expectedResource.toJsonString()));
   }
 
   @Test(expected = InvalidApiResource.class)
@@ -99,7 +99,7 @@ public class PutGoalHandlerTest {
 
     // Attempt the PUT.  This should blow up with a InvalidApiResource exception.
     ApiGatewayProxyRequest request = new ApiGatewayProxyRequest()
-        .setPath("/user/" + testId.toEncoded())
+        .setPath("/user/" + testId.toBase64String())
         .setHttpMethod(MethodType.PUT.toString())
         .setBody(testResource.toJsonString())
         .setBase64Encoded(false);
@@ -117,7 +117,7 @@ public class PutGoalHandlerTest {
 
     // Attempt the PUT.  This should blow up with a InvalidApiResource exception.
     ApiGatewayProxyRequest request = new ApiGatewayProxyRequest()
-        .setPath("/user/" + testId.toEncoded())
+        .setPath("/user/" + testId.toBase64String())
         .setHttpMethod(MethodType.PUT.toString())
         .setBase64Encoded(false);
 

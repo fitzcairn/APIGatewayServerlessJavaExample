@@ -1,8 +1,8 @@
-package com.stevezero.aws.api.apps.goaltender.service.goal;
+package com.stevezero.aws.api.apps.goaltender.service;
 
-import com.stevezero.aws.api.ApiProxyHandler;
-import com.stevezero.aws.api.apps.goaltender.service.goal.handlers.GetGoalsHandler;
-import com.stevezero.aws.api.apps.goaltender.service.goal.handlers.PutGoalHandler;
+import com.stevezero.aws.api.service.ApiProxyHandler;
+import com.stevezero.aws.api.apps.goaltender.service.impl.GetGoalsHandler;
+import com.stevezero.aws.api.apps.goaltender.service.impl.PutGoalHandler;
 import com.stevezero.aws.api.apps.goaltender.storage.service.impl.UserStorageService;
 import com.stevezero.aws.api.http.MethodType;
 import com.stevezero.aws.api.storage.service.StorageService;

@@ -1,6 +1,6 @@
 package com.stevezero.aws.api.mocks;
 
-import com.stevezero.aws.api.id.ResourceId;
+import com.stevezero.aws.api.id.ApiResourceId;
 import com.stevezero.aws.api.storage.items.MappedItem;
 import com.stevezero.aws.api.storage.service.StorageService;
 
@@ -36,7 +36,7 @@ public class MockStorageService implements StorageService {
   }
 
   @Override
-  public MappedItem get(ResourceId id) {
-    return storageMap.get(id.toEncoded());
+  public MappedItem get(ApiResourceId id) {
+    return storageMap.get(id.toBase64String());
   }
 }

@@ -1,7 +1,6 @@
 package com.stevezero.aws.api.apps.goaltender.storage.items.impl;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperFieldModel.DynamoDBAttributeType;
 import com.stevezero.aws.api.storage.items.MappedItem;
 
 /**
@@ -32,7 +31,7 @@ public class UserItem implements MappedItem {
     this.lastUpdateDateTimeString = lastUpdateDateTimeString;
   }
 
-  @DynamoDBTyped(DynamoDBAttributeType.BOOL)
+  @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.BOOL)
   @DynamoDBAttribute(attributeName="getHasSeenFtux")
   public boolean getHasSeenFtux() {
     return hasSeenFtux;
@@ -41,7 +40,7 @@ public class UserItem implements MappedItem {
     this.hasSeenFtux = hasSeenFtux;
   }
 
-  @DynamoDBTyped(DynamoDBAttributeType.BOOL)
+  @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.BOOL)
   @DynamoDBAttribute(attributeName="getHasRemindersOn")
   public boolean getHasRemindersOn() {
     return hasRemindersOn;

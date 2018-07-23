@@ -1,6 +1,6 @@
 package com.stevezero.aws.api.storage.service;
 
-import com.stevezero.aws.api.id.ResourceId;
+import com.stevezero.aws.api.id.ApiResourceId;
 import com.stevezero.aws.api.storage.items.MappedItem;
 
 /**
@@ -21,6 +21,6 @@ public interface StorageService {
    * @param id the ID of the user to return.
    * @return the MappedItem, or null if not found.
    */
-  public MappedItem get(ResourceId id);
+  public MappedItem get(ApiResourceId id);
 
 }

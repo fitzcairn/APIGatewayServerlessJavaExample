@@ -1,4 +1,4 @@
-package com.stevezero.aws.api;
+package com.stevezero.aws.api.service;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
@@ -7,14 +7,13 @@ import com.stevezero.aws.api.exceptions.ApiException;
 import com.stevezero.aws.api.exceptions.InvalidApiMethod;
 import com.stevezero.aws.api.http.MethodType;
 import com.stevezero.aws.api.http.StatusCode;
-import com.stevezero.aws.api.service.ApiMethodHandler;
 import com.stevezero.aws.api.storage.service.StorageService;
 
 import java.util.EnumMap;
 import java.util.Map;
 
 /**
- * Generic AWS API Gatreway proxy API handler for lambdas.  Subclass this and add method-specific handlers to implement
+ * Generic AWS API Gateway proxy API handler for lambdas.  Subclass this and add method-specific handlers to implement
  * a proxy API.
  */
 public abstract class ApiProxyHandler implements RequestHandler<ApiGatewayProxyRequest, ApiGatewayProxyResponse> {
@@ -40,9 +39,6 @@ public abstract class ApiProxyHandler implements RequestHandler<ApiGatewayProxyR
   public ApiGatewayProxyResponse handleRequest(ApiGatewayProxyRequest request, Context context) {
     ApiGatewayProxyResponse.Builder responseBuilder = new ApiGatewayProxyResponse.Builder();
     LambdaLogger logger = context.getLogger();
-
-    // TODO: remove.
-    logger.log(request.toString());
 
     try {
       // Do we have this method implemented on this resource?

@@ -18,48 +18,40 @@ public class UserIdTest {
   }
 
   @Test
-  public void testToIdString() throws InvalidResourceIdException {
-    UserId userId = new UserId("1234", IdentityType.GOOGLE);
+  public void testToBase64() {
+    UserId test = new UserId("1234", IdentityType.GOOGLE);
+    String expected = "eyJ0IjoiZyIsImkiOiIxMjM0In0="; // Encoded version of output JSON.
 
-    // {"t": "g","i": "1234"}
-    String expected = "eyJ0IjoiZyIsImkiOiIxMjM0In0=";
-    assertEquals(expected, userId.toEncoded());
+    assertEquals(expected, test.toBase64String());
   }
 
   @Test
-  public void testFromIdStringOk() throws InvalidResourceIdException {
+  public void testUserIdFromBase64StringOk() throws InvalidResourceIdException {
     // {"t": "g","i": "1234"}
     String testIdString = "eyJ0IjoiZyIsImkiOiIxMjM0In0=";
 
-    UserId result = UserId.fromEncoded(testIdString);
+    UserId result = new UserId(testIdString);
     assertEquals("1234", result.getId());
     assertEquals(IdentityType.GOOGLE, result.getType());
   }
 
   @Test(expected = InvalidResourceIdException.class)
-  public void testFromIdStringInvalidBase64() throws InvalidResourceIdException {
-    UserId.fromEncoded("///");
+  public void testUserIdFromBase64StringInvalidBase64() throws InvalidResourceIdException {
+    UserId result = new UserId("///");
   }
 
   @Test(expected = InvalidResourceIdException.class)
-  public void testFromIdStringInvalidJson() throws InvalidResourceIdException {
+  public void testUserIdFromBase64StringInvalidJson() throws InvalidResourceIdException {
     // {t: "g",i: "1234"} <-- missing quotes on keys, invalid
     String testIdString = "e3Q6ICJnIixpOiAiMTIzNCJ9";
-    UserId.fromEncoded(testIdString);
+    UserId result = new UserId(testIdString);
   }
 
   @Test(expected = InvalidResourceIdException.class)
-  public void testFromIdStringInvalidIdentity() throws InvalidResourceIdException {
+  public void testUserIdFromBase64StringInvalidIdentity() throws InvalidResourceIdException {
     // {"t": "XX","i": "1234"}
     String testIdString = "eyJ0IjogIlhYIiwiaSI6ICIxMjM0In0=";
-    UserId.fromEncoded(testIdString);
+    UserId result = new UserId(testIdString);
   }
 
-  @Test
-  public void testToEncoded() {
-    UserId test = new UserId("1234", IdentityType.GOOGLE);
-    String expected = "eyJ0IjoiZyIsImkiOiIxMjM0In0="; // Encoded version of output JSON.
-
-    assertEquals(expected, test.toEncoded());
-  }
 }

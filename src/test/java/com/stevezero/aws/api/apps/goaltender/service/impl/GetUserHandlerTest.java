@@ -1,24 +1,24 @@
-package com.stevezero.aws.api.apps.goaltender.service.goal.handlers;
+package com.stevezero.aws.api.apps.goaltender.service.impl;
 
-import com.stevezero.aws.api.ApiGatewayProxyRequest;
-import com.stevezero.aws.api.ApiGatewayProxyResponse;
+import com.stevezero.aws.api.service.ApiGatewayProxyRequest;
+import com.stevezero.aws.api.service.ApiGatewayProxyResponse;
+import com.stevezero.aws.api.mocks.MockContext;
 import com.stevezero.aws.api.apps.goaltender.storage.items.impl.UserItem;
 import com.stevezero.aws.api.exceptions.ApiException;
 import com.stevezero.aws.api.exceptions.InvalidResourceIdException;
 import com.stevezero.aws.api.http.StatusCode;
-import com.stevezero.aws.api.mocks.MockContext;
 import com.stevezero.aws.api.mocks.MockStorageService;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests for the public class GetGoalsHandler class.
+ * Tests for the public class GetUserHandler class.
  */
-public class GetGoalsHandlerTest {
+public class GetUserHandlerTest {
   // {"t": "g","i": "1234"}
   private final String testIdString = "eyJ0IjoiZyIsImkiOiIxMjM0In0=";
-  private final GetGoalsHandler requestHandler = new GetGoalsHandler();
+  private final GetUserHandler requestHandler = new GetUserHandler();
 
   @Test
   public void testHandleRequest() throws ApiException {

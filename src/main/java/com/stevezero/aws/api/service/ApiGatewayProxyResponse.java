@@ -1,4 +1,4 @@
-package com.stevezero.aws.api;
+package com.stevezero.aws.api.service;
 
 import com.stevezero.aws.api.http.StatusCode;
 import org.json.simple.JSONObject;

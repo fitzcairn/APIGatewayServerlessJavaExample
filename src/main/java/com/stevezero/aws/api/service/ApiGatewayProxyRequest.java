@@ -1,4 +1,4 @@
-package com.stevezero.aws.api;
+package com.stevezero.aws.api.service;
 
 import com.amazonaws.services.lambda.runtime.Context;
 

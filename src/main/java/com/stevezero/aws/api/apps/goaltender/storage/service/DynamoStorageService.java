@@ -7,7 +7,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.stevezero.aws.api.storage.service.StorageService;
 
 /**
- * Take care of setup for storage.
+ * Take care of setup for Dynamo-backed storage.
  */
 public abstract class DynamoStorageService implements StorageService {
   protected final DynamoDBMapper dynamoDbMapper;
