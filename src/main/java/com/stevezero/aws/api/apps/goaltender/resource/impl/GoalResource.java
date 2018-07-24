@@ -42,7 +42,7 @@ public class GoalResource implements ApiResource {
    *             goalText: String,
    *             goalCreateDateString: String,
    *             complete: boolean,
-\   *           }
+   *           }
    *
    * @param jsonString the JSON representation of the resource.
    * @param userBase64String the JSON representation of the resource.

@@ -23,7 +23,7 @@ I suggest you do the following before cloning this project:
 
 * Clone this repository to your local machine (directions [here](https://help.github.com/articles/cloning-a-repository/)).
 * I strongly suggest [creating a local branch](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging) before making any changes.
-* Open IntelliJ and[import the Maven project](https://www.lagomframework.com/documentation/1.4.x/java/IntellijMaven.html).
+* Open IntelliJ and [import the Maven project](https://www.lagomframework.com/documentation/1.4.x/java/IntellijMaven.html).
 * To build a jar with dependencies (suitable for deploying to a AWS lambda), use the [Maven Assembly Plugin](https://maven.apache.org/plugins/maven-assembly-plugin/usage.html).
 
 ## Running Tests
