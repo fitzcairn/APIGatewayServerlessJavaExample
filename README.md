@@ -1,8 +1,8 @@
-# APIGatewayServerlessExample
+# APIGatewayServerlessJavaExample
 
-This is a simple framework for implementing a serverless RESTful API via [AWS Lambda](https://aws.amazon.com/lambda/) functions, and fronted by [API Gateway](https://aws.amazon.com/api-gateway/).
+This is a simple framework for implementing a serverless RESTful API fronted by [API Gateway](https://aws.amazon.com/api-gateway/) and powered by [AWS Lambda](https://aws.amazon.com/lambda/) functions written in Java 8.
 
-The sample implementation is an API intended to back [GoalTender](https://github.com/fitzcairn/GoalTender) (a React Native app), using [DynamoDb](https://aws.amazon.com/dynamodb/) as a storage provider.
+The sample implementation is an API backing [GoalTender](https://github.com/fitzcairn/GoalTender) (a React Native app), using [DynamoDb](https://aws.amazon.com/dynamodb/) as a storage provider.
 
 ## Getting Started
 
@@ -23,8 +23,8 @@ I suggest you do the following before cloning this project:
 
 * Clone this repository to your local machine (directions [here](https://help.github.com/articles/cloning-a-repository/)).
 * I strongly suggest [creating a local branch](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging) before making any changes.
-* Open IntelliJ, and create your project by [importing the Maven project](https://www.lagomframework.com/documentation/1.4.x/java/IntellijMaven.html).
-* [Open the Gradle tool window in IntelliJ](https://www.jetbrains.com/help/idea/jetgradle-tool-window.html), expand "Tasks", expand "application", and double-click "run".
+* Open IntelliJ and[import the Maven project](https://www.lagomframework.com/documentation/1.4.x/java/IntellijMaven.html).
+* To build a jar with dependencies (suitable for deploying to a AWS lambda), use the [Maven Assembly Plugin](https://maven.apache.org/plugins/maven-assembly-plugin/usage.html).
 
 ## Running Tests
 
@@ -32,11 +32,11 @@ There is a reasonably full suite of tests for this repository; run them via Inte
 
 ## Contributing
 
-I rather like this [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426); let's follow that for any pull requests.
+I rather like this [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426); let's follow that for any pull requests.  Improvements always welcome--this codebase has a lot of room to get better.
 
 ## Versioning
 
-I use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/fitzcairn/APIGatewayServerlessExample/tags).
+I use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/fitzcairn/APIGatewayServerlessJavaExample/tags).
 
 ## Authors
 
