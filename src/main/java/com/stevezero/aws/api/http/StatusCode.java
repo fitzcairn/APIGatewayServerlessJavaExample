@@ -5,7 +5,7 @@ public enum StatusCode {
   BAD_REQUEST(400, "Bad request"),
   NOT_FOUND(404, "Not found"),
   NOT_ALLOWED(405, "Method not allowed"),
-  CONFLICT(405, "Conflict"),
+  CONFLICT(409, "Conflict"),
   SERVER_ERROR(500, "Unknown Server Error");
 
   private final int code;

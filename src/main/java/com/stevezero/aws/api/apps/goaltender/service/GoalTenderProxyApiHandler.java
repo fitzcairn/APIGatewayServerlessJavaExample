@@ -26,7 +26,7 @@ public class GoalTenderProxyApiHandler extends ApiProxyHandler {
     GoalTenderResourceType resourceType = (GoalTenderResourceType)parsedApiPath.getLastResource();
     switch(resourceType) {
       case USER:
-        // Instantiate handler for method on user resource.
+        // Instantiate handler for method on User resource.
         switch(methodType) {
           case GET:
             return new UserGetHandler();
@@ -37,7 +37,7 @@ public class GoalTenderProxyApiHandler extends ApiProxyHandler {
             throw new InvalidApiMethod(methodType, resourceType);
         }
       case GOAL:
-        // Instantiate handler for method on user resource.
+        // Instantiate handler for method on Goal resource.
         switch(methodType) {
           case GET:
             return new GoalGetHandler();
